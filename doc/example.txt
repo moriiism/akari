@@ -1,0 +1,55 @@
+0. preparation
+
+% conda install astropy
+% conda install scikit-learn
+% conda install matplotlib
+
+
+
+1. Setup
+
+akari_tool_dir: /home/morii/work/github/moriiism/akari
+
+% source $akari_tool_dir/setup/setup.sh
+
+data:
+/home/morii/work/akari/data/spikethumb_20230407/
+
+1. preproc
+
+1.1: fits --> csv
+% python fits_to_csv.py
+  data_dir: /home/morii/work/akari/data/spikethumb_20230407/*.fits
+  outcsv: /home/morii/work/akari/ana/spikethumb_20230407/akari.csv
+  csv columns: file,tzl_x,tzl_y,
+              x00y00,x00y01,x00y02,x00y03,x00y04,
+              x01y00,x01y01,x01y02,x01y03,x01y04,
+              x02y00,x02y01,x02y02,x02y03,x02y04,
+              x03y00,x03y01,x03y02,x03y03,x03y04,
+              x04y00,x04y01,x04y02,x04y03,x04y04
+
+1.2: add statistical values
+% python add_stat.py
+  incsv:  /home/morii/work/akari/ana/spikethumb_20230407/akari.csv
+  outcsv: /home/morii/work/akari/ana/spikethumb_20230407/akari_stat.csv
+  csv columns: akari.csv + 
+              x00y00_norm,x00y01_norm,x00y02_norm,x00y03_norm,x00y04_norm,
+              x01y00_norm,x01y01_norm,x01y02_norm,x01y03_norm,x01y04_norm,
+              x02y00_norm,x02y01_norm,x02y02_norm,x02y03_norm,x02y04_norm,
+              x03y00_norm,x03y01_norm,x03y02_norm,x03y03_norm,x03y04_norm,
+              x04y00_norm,x04y01_norm,x04y02_norm,x04y03_norm,x04y04_norm,
+              sum,norm_stddev,norm_min,norm_max,norm_skew,norm_kurt,norm_gini
+
+1.3: add flag of star/spike
+% python add_flag_star.py
+  incsv:  /home/morii/work/akari/ana/spikethumb_20230407/akari_stat.csv
+  outcsv: /home/morii/work/akari/ana/spikethumb_20230407/akari_stat_star.csv
+  csv columns: akari_stat.csv + star
+
+1.4: add outlier flag by pca
+% python add_flag_outlier.py
+  incsv:  /home/morii/work/akari/ana/spikethumb_20230407/akari_stat_star.csv
+  outcsv: /home/morii/work/akari/ana/spikethumb_20230407/akari_stat_star_outlier.csv
+  csv columns: akari_stat_star.csv + outlier
+
+

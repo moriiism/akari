@@ -1,4 +1,5 @@
 import pandas as pd
+from akarilib import gini
 
 def calcNormInRowOfDataFrame(row_ser):
     # call by data_frame.apply(calcNormInRowOfDataFrame, axis=1)

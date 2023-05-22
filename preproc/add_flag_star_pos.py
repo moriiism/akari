@@ -1,5 +1,7 @@
 #
-# addflag.py
+# add_flag_star_pos.py
+#
+# add flag of star/spike by position
 #
 
 # Preparation:
@@ -7,16 +9,19 @@
 #   % conda install scikit-learn
 #   % conda install matplotlib
 #
-# add flag of star/spike
+# Setup:
+#   % source $akari_tool_dir/setup/setup.sh
+# Run:
+#   % python $akari_tool/preproc/add_flag_star.py
 #
 
 import os
+import sys
 import pandas as pd
+from akarilib import getColNameLst
+from akarilib import calcNormInRowOfDataFrame, calcStatInRowOfDataFrame
 
-from util import getColNameLst
-from util import calcNormInRowOfDataFrame, calcStatInRowOfDataFrame
-
-indir = "/home/morii/work/akari/ana/spikethumb_20230407"
+indir = os.environ["AKARI_ANA_DIR"]
 incsv = indir + "/" + "akari_stat.csv"
 data_df = pd.read_csv(incsv)
 print(data_df)
@@ -45,12 +50,19 @@ for irow1 in range(len(data_sel_df)):
             ( abs(tzl_y_1 - tzl_y_2) < 3 ) ):
             print(file1, file2, tzl_x_1, tzl_x_2, tzl_y_1, tzl_y_2)
             flag_df.loc[irow1, "star"] = 1
+        if( (obsid1 == obsid2) and
+            (sernum1 != sernum2) and
+            ( abs(tzl_x_1 - tzl_x_2) < 2 ) and
+            ( abs(tzl_y_1 - tzl_y_2) < 2 ) ):
+            print(file1, file2, tzl_x_1, tzl_x_2, tzl_y_1, tzl_y_2)
+            flag_df.loc[irow1, "star"] += 1
+
 
 print(flag_df)
 data_add_df = pd.concat([data_df, flag_df], axis=1)
 print(data_add_df)
 
 outdir = indir
-outcsv = outdir + "/" + "akari_stat_flag.csv"
+outcsv = outdir + "/" + "akari_stat_star.csv"
 print(f"outcsv = {outcsv}")
 data_add_df.to_csv(outcsv, index=False)

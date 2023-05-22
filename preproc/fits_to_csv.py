@@ -1,12 +1,14 @@
 #
 # fits_to_csv.py
 #
+# convert fits file data to csv file
+#
 
 # Preparation:
 #   % conda install astropy
 #   % conda install scikit-learn
 #   % conda install matplotlib
-
+#
 # Setup:
 #   % source $akari_tool_dir/setup/setup.sh
 # Run:
@@ -18,11 +20,14 @@ import sys
 from astropy.io import fits
 import pandas as pd
 from akarilib import getColNameLst
+from akarilib import EclipticToRaDec
+
 
 # keyword
-
 # TZL_X/TZL_Y
-colname_lst = ["file", "tzl_x", "tzl_y"] + getColNameLst() 
+# CRVAL1/2 (Ecliptic coordinate system, Longitude/Lattitude)
+colname_lst = ["file", "tzl_x", "tzl_y",
+               "crval1", "crval2", "ra", "dec"] + getColNameLst() 
 data_all_df = pd.DataFrame([], columns=colname_lst)
 data_all_df = data_all_df.astype(float)
 data_all_df['file'] = data_all_df['file'].astype(str)
@@ -48,7 +53,14 @@ for dataname in data_lst:
     data_df.iloc[0,0] = dataname
     data_df.iloc[0,1] = hdu0.header["TZL_X"]
     data_df.iloc[0,2] = hdu0.header["TZL_Y"]
-    data_df.iloc[0,3:] = data_1d.tolist()
+    data_df.iloc[0,3] = hdu0.header["CRVAL1"]
+    data_df.iloc[0,4] = hdu0.header["CRVAL2"]
+    ecliptic_lon = hdu0.header["CRVAL1"]
+    ecliptic_lat = hdu0.header["CRVAL2"]
+    (ra, dec) = EclipticToRaDec(ecliptic_lon, ecliptic_lat)
+    data_df.iloc[0,5] = ra
+    data_df.iloc[0,6] = dec
+    data_df.iloc[0,7:] = data_1d.tolist()
     data_all_df = pd.concat([data_all_df, data_df], ignore_index=True)
 
     del data_df

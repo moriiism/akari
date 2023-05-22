@@ -1,5 +1,7 @@
 #
-# addstat.py
+# add_stat.py
+#
+# add statistical values
 #
 
 # Preparation:
@@ -7,21 +9,25 @@
 #   % conda install scikit-learn
 #   % conda install matplotlib
 #
-# add statistical values
+# Setup:
+#   % source $akari_tool_dir/setup/setup.sh
+# Run:
+#   % python $akari_tool/preproc/add_stat.py
 #
 
 import os
+import sys
 import pandas as pd
+from akarilib import getColNameLst
+from akarilib import calcNormInRowOfDataFrame, calcStatInRowOfDataFrame
 
-from util import getColNameLst
-from util import calcNormInRowOfDataFrame, calcStatInRowOfDataFrame
-
-indir = "/home/morii/work/akari/ana/spikethumb_20230407"
+indir = os.environ["AKARI_ANA_DIR"]
 incsv = indir + "/" + "akari.csv"
 data_df = pd.read_csv(incsv)
 print(data_df)
 
-data_sel_df = data_df.drop(["file", "tzl_x", "tzl_y"], axis=1)
+data_sel_df = data_df.drop(["file", "tzl_x", "tzl_y",
+                            "crval1", "crval2", "ra", "dec"], axis=1)
 data_norm_df = data_sel_df.apply(calcNormInRowOfDataFrame, axis=1)
 print(data_norm_df)
 data_stat_df = data_norm_df.apply(calcStatInRowOfDataFrame, axis=1)

@@ -12,14 +12,14 @@
 # Setup:
 #   % source $akari_tool_dir/setup/setup.sh
 # Run:
-#   % python $akari_tool/preproc/add_flag_star.py
+#   % python $akari_tool/preproc/add_flag_star_pos.py
 #
 
 import os
 import sys
 import pandas as pd
-from akarilib import getColNameLst
-from akarilib import calcNormInRowOfDataFrame, calcStatInRowOfDataFrame
+from akarilib import calc_norm_in_row_of_dataframe
+from akarilib import calc_stat_in_row_of_dataframe
 
 indir = os.environ["AKARI_ANA_DIR"]
 incsv = indir + "/" + "akari_stat.csv"
@@ -28,9 +28,9 @@ print(data_df)
 nrow = len(data_df)
 
 data_sel_df = data_df[["file", "tzl_x", "tzl_y"]]
-flag_df = pd.DataFrame([], index=range(nrow), columns=["star"])
-flag_df.loc[:, "star"] = 0
-flag_df["star"] = flag_df["star"].astype(int)
+flag_df = pd.DataFrame([], index=range(nrow), columns=["star_pos"])
+flag_df.loc[:, "star_pos"] = 0
+flag_df["star_pos"] = flag_df["star_pos"].astype(int)
 
 for irow1 in range(len(data_sel_df)):
     file1 = data_sel_df.loc[irow1, "file"]
@@ -49,13 +49,13 @@ for irow1 in range(len(data_sel_df)):
             ( abs(tzl_x_1 - tzl_x_2) < 3 ) and
             ( abs(tzl_y_1 - tzl_y_2) < 3 ) ):
             print(file1, file2, tzl_x_1, tzl_x_2, tzl_y_1, tzl_y_2)
-            flag_df.loc[irow1, "star"] = 1
+            flag_df.loc[irow1, "star_pos"] = 1
         if( (obsid1 == obsid2) and
             (sernum1 != sernum2) and
             ( abs(tzl_x_1 - tzl_x_2) < 2 ) and
             ( abs(tzl_y_1 - tzl_y_2) < 2 ) ):
             print(file1, file2, tzl_x_1, tzl_x_2, tzl_y_1, tzl_y_2)
-            flag_df.loc[irow1, "star"] += 1
+            flag_df.loc[irow1, "star_pos"] += 1
 
 
 print(flag_df)

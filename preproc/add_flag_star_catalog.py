@@ -1,5 +1,5 @@
 #
-# add_flag_star.py
+# add_flag_star_catalog.py
 #
 # add flag of star by catalog
 #
@@ -17,12 +17,12 @@
 
 import os
 import sys
+import time
 import pandas as pd
 from astropy.coordinates import SkyCoord, angular_separation, Angle
 from astropy import units
 
-from akarilib import getColNameLst
-from akarilib import calcNormInRowOfDataFrame, calcStatInRowOfDataFrame
+from akarilib import calc_angular_separation_in_row_of_dataframe
 
 indir = os.environ["AKARI_ANA_DIR"]
 incsv = indir + "/" + "akari_stat_star.csv"
@@ -38,25 +38,40 @@ print(cat_df)
 nrow_cat = len(cat_df)
 
 data_sel_df = data_df[["ra", "dec"]]
-flag_df = pd.DataFrame([], index=range(nrow), columns=["cat"])
-flag_df.loc[:, "cat"] = 0
-flag_df["cat"] = flag_df["cat"].astype(int)
+flag_df = pd.DataFrame([], index=range(nrow), columns=["star_cat"])
+flag_df.loc[:, "star_cat"] = 0
+flag_df["star_cat"] = flag_df["star_cat"].astype(int)
 
 for irow1 in range(len(data_sel_df)):
     print(irow1)
     ra = data_sel_df.loc[irow1, "ra"]
     dec = data_sel_df.loc[irow1, "dec"]
-    for irow2 in range(len(cat_df)):
-        ra_cat = cat_df.loc[irow2, "ra_cat"]
-        dec_cat = cat_df.loc[irow2, "dec_cat"]
+    time_st = time.time()
+    print(time_st)
+    for irow2, (ra_cat, dec_cat) in enumerate(zip(
+            cat_df["ra_cat"].values,
+            cat_df["dec_cat"].values)):
         separation = angular_separation(
             Angle(ra, units.degree),
             Angle(dec, units.degree),
             Angle(ra_cat, units.degree),
             Angle(dec_cat, units.degree))
+        if (irow2 % 100000 == 0):
+            print(irow2)
         if (separation.to(units.arcsec).value < 5):
-            flag_df.loc[irow1, "cat"] = 1
-            print(separation.to(units.arcsec))
+            flag_df.iloc[irow1, "star_cat"] = 1
+            next
+    time_ed = time.time()
+    print(time_ed - time_st)
+
+exit()
+
+        #match_df = cat_df.apply(
+        #calc_angular_separation_in_row_of_dataframe,
+        #args=(ra, dec), axis=1)
+        #sum = match_df.sum()
+        #print(sum)
+
 
 print(flag_df)
 data_add_df = pd.concat([data_df, flag_df], axis=1)

@@ -1,5 +1,7 @@
 import pandas as pd
 from akarilib import gini
+from astropy import units
+from astropy.coordinates import angular_separation, Angle
 
 def calc_norm_in_row_of_dataframe(row_ser):
     # call by data_frame.apply(calc_norm_in_row_of_dataframe, axis=1)
@@ -22,3 +24,24 @@ def calc_stat_in_row_of_dataframe(row_ser):
     row_stat_ser["norm_kurt"] = row_sel_ser.kurt()
     row_stat_ser["norm_gini"] = gini(row_sel_ser.values)
     return row_stat_ser
+
+def calc_angular_separation_in_row_of_dataframe(
+        row_ser, ra, dec):
+    # call by data_frame.apply(
+    #   calc_angular_separation_in_row_of_dataframe(ra, dec), axis=1)
+
+    ra_cat = row_ser["ra_cat"]
+    dec_cat = row_ser["dec_cat"]
+    separation = angular_separation(
+        Angle(ra, units.degree),
+        Angle(dec, units.degree),
+        Angle(ra_cat, units.degree),
+        Angle(dec_cat, units.degree))
+    print(separation)
+    if (separation.to(units.arcsec).value < 5):
+        return 1
+    else:
+        return 0
+
+
+

@@ -19,15 +19,14 @@ import os
 import sys
 from astropy.io import fits
 import pandas as pd
-from akarilib import getColNameLst
-from akarilib import EclipticToRaDec
-
+from akarilib import get_colname_lst_of_pixarr
+from akarilib import ecliptic_to_radec
 
 # keyword
 # TZL_X/TZL_Y
 # CRVAL1/2 (Ecliptic coordinate system, Longitude/Lattitude)
 colname_lst = ["file", "tzl_x", "tzl_y",
-               "crval1", "crval2", "ra", "dec"] + getColNameLst() 
+               "crval1", "crval2", "ra", "dec"] + get_colname_lst_of_pixarr() 
 data_all_df = pd.DataFrame([], columns=colname_lst)
 data_all_df = data_all_df.astype(float)
 data_all_df['file'] = data_all_df['file'].astype(str)
@@ -45,7 +44,7 @@ for dataname in data_lst:
     print(f"idata = {idata}({ndata}): {dataname}")
     hdu = fits.open(data_dir + "/" + dataname)
     hdu0 = hdu[0]
-    data_1d = hdu0.data.flatten()
+    data_1darr = hdu0.data.flatten()
     data_df = pd.DataFrame([], columns=colname_lst)
     data_df = data_df.astype(float)
     data_df['file'] = data_df['file'].astype(str)
@@ -57,14 +56,14 @@ for dataname in data_lst:
     data_df.iloc[0,4] = hdu0.header["CRVAL2"]
     ecliptic_lon = hdu0.header["CRVAL1"]
     ecliptic_lat = hdu0.header["CRVAL2"]
-    (ra, dec) = EclipticToRaDec(ecliptic_lon, ecliptic_lat)
+    (ra, dec) = ecliptic_to_radec(ecliptic_lon, ecliptic_lat)
     data_df.iloc[0,5] = ra
     data_df.iloc[0,6] = dec
-    data_df.iloc[0,7:] = data_1d.tolist()
+    data_df.iloc[0,7:] = data_1darr.tolist()
     data_all_df = pd.concat([data_all_df, data_df], ignore_index=True)
 
     del data_df
-    del data_1d
+    del data_1darr
     hdu.close()
     idata += 1
 

@@ -1,8 +1,8 @@
 from astropy.coordinates import SkyCoord
 from astropy import units
 
-def EclipticToRaDec(ecliptic_lon,
-                    ecliptic_lat):
+def ecliptic_to_radec(ecliptic_lon,
+                      ecliptic_lat):
     coord = SkyCoord(
         lon=ecliptic_lon, lat=ecliptic_lat,
         frame='barycentricmeanecliptic',
@@ -11,7 +11,7 @@ def EclipticToRaDec(ecliptic_lon,
     dec = coord.dec.degree
     return [ra, dec]
 
-def RaDecToEcliptic(ra, dec):
+def radec_to_ecliptic(ra, dec):
     ecliptic = SkyCoord(ra, dec,
                         unit=(units.degree, units.degree),
                         frame='icrs').transform_to(
@@ -20,4 +20,3 @@ def RaDecToEcliptic(ra, dec):
     ecliptic_lat = ecliptic.lat.degree
     return [ecliptic_lon,
             ecliptic_lat]
-

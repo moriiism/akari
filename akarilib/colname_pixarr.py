@@ -1,4 +1,8 @@
-def getColNameLst():
+#
+# column name of pixel array
+#
+
+def get_colname_lst_of_pixarr():
     # get the following column name list
     # ['x00y00', 'x00y01', ..., 'x00y04', 
     # 'x01y00', 'x01y01', ..., 'x01y04',

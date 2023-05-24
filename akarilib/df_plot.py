@@ -1,8 +1,14 @@
+#
+# df_plot.py
+#
+# plot figure for data stored in DataFrame
+#
+
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def plotHist1d_DataFrame(data_df, colname, outdir, xscale, yscale,
-                         xmin=None, xmax=None, ymin=None, ymax=None):
+def plot_hist1d_dataframe(data_df, colname, outdir, xscale, yscale,
+                          xmin=None, xmax=None, ymin=None, ymax=None):
     fig, ax = plt.subplots()
     range_tpl = None
     if (xmin != None) and (xmax != None):
@@ -27,9 +33,9 @@ def plotHist1d_DataFrame(data_df, colname, outdir, xscale, yscale,
     del ax
 
 
-def plotScatter_DataFrame(data_df, colname1, colname2, outdir,
-                          xscale="linear", yscale="linear",
-                          xmin=None, xmax=None, ymin=None, ymax=None):
+def plot_scatter_dataframe(data_df, colname1, colname2, outdir,
+                           xscale="linear", yscale="linear",
+                           xmin=None, xmax=None, ymin=None, ymax=None):
     fig, ax = plt.subplots()
     plt.scatter(data_df[colname1], data_df[colname2])
     plt.xlabel(colname1)

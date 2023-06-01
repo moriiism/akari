@@ -3,6 +3,44 @@ from akarilib import gini
 from astropy import units
 from astropy.coordinates import angular_separation, Angle
 
+
+#def calc_2dgaussfit_in_row_of_dataframe(row_ser):
+#    # call by data_frame.apply(
+#    #   calc_feature_in_row_of_dataframe, axis=1)
+#    row_sel_ser = row_ser.drop("sum")
+#    row_feature_ser = pd.Series([], dtype=float)
+#    peak = row_sel_ser["x02y02_norm"]
+#    around = (row_sel_ser["x01y01_norm"]
+#              + row_sel_ser["x01y02_norm"]
+#              + row_sel_ser["x01y03_norm"]
+#              + row_sel_ser["x02y01_norm"]
+#              + row_sel_ser["x02y03_norm"]
+#              + row_sel_ser["x03y01_norm"]
+#              + row_sel_ser["x03y02_norm"]
+#              + row_sel_ser["x03y03_norm"]) / 8.0
+#    ratio_around_to_peak = around / peak
+#    row_feature_ser["ratio_around_to_peak"] = ratio_around_to_peak
+#    return row_feature_ser
+
+
+def calc_feature_in_row_of_dataframe(row_ser):
+    # call by data_frame.apply(
+    #   calc_feature_in_row_of_dataframe, axis=1)
+    row_sel_ser = row_ser.drop("sum")
+    row_feature_ser = pd.Series([], dtype=float)
+    peak = row_sel_ser["x02y02_norm"]
+    around = (row_sel_ser["x01y01_norm"]
+              + row_sel_ser["x01y02_norm"]
+              + row_sel_ser["x01y03_norm"]
+              + row_sel_ser["x02y01_norm"]
+              + row_sel_ser["x02y03_norm"]
+              + row_sel_ser["x03y01_norm"]
+              + row_sel_ser["x03y02_norm"]
+              + row_sel_ser["x03y03_norm"]) / 8.0
+    ratio_around_to_peak = around / peak
+    row_feature_ser["ratio_around_to_peak"] = ratio_around_to_peak
+    return row_feature_ser
+
 def calc_norm_in_row_of_dataframe(row_ser):
     # call by data_frame.apply(calc_norm_in_row_of_dataframe, axis=1)
     row_norm_ser = row_ser.copy()

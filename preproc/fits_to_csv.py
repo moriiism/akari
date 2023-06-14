@@ -23,13 +23,19 @@ from akarilib import get_colname_lst_of_pixarr
 from akarilib import ecliptic_to_radec
 
 # keyword
+# TZ_X/TZ_Y
 # TZL_X/TZL_Y
+#  left side  (1 <= TZ_X < 64) : TZL_X = TZ_X, TZL_Y = TZ_Y
+#  right side (64 <= TZ_X)     : TZL_X = TZ_X - 63, TZL_Y = TZ_Y + 2
 # CRVAL1/2 (Ecliptic coordinate system, Longitude/Lattitude)
-colname_lst = ["file", "tzl_x", "tzl_y",
-               "crval1", "crval2", "ra", "dec"] + get_colname_lst_of_pixarr() 
+colname_lst = (["file", "tz_x", "tz_y", "tzl_x", "tzl_y",
+                "crval1", "crval2", "ra", "dec"]
+               + get_colname_lst_of_pixarr())
 data_all_df = pd.DataFrame([], columns=colname_lst)
 data_all_df = data_all_df.astype(float)
 data_all_df['file'] = data_all_df['file'].astype(str)
+data_all_df['tz_x'] = data_all_df['tz_x'].astype(int)
+data_all_df['tz_y'] = data_all_df['tz_y'].astype(int)
 data_all_df['tzl_x'] = data_all_df['tzl_x'].astype(int)
 data_all_df['tzl_y'] = data_all_df['tzl_y'].astype(int)
 
@@ -50,16 +56,18 @@ for dataname in data_lst:
     data_df['file'] = data_df['file'].astype(str)
     data_df.loc[0] = 0
     data_df.iloc[0,0] = dataname
-    data_df.iloc[0,1] = hdu0.header["TZL_X"]
-    data_df.iloc[0,2] = hdu0.header["TZL_Y"]
-    data_df.iloc[0,3] = hdu0.header["CRVAL1"]
-    data_df.iloc[0,4] = hdu0.header["CRVAL2"]
+    data_df.iloc[0,1] = hdu0.header["TZ_X"]
+    data_df.iloc[0,2] = hdu0.header["TZ_Y"]
+    data_df.iloc[0,3] = hdu0.header["TZL_X"]
+    data_df.iloc[0,4] = hdu0.header["TZL_Y"]
+    data_df.iloc[0,5] = hdu0.header["CRVAL1"]
+    data_df.iloc[0,6] = hdu0.header["CRVAL2"]
     ecliptic_lon = hdu0.header["CRVAL1"]
     ecliptic_lat = hdu0.header["CRVAL2"]
     (ra, dec) = ecliptic_to_radec(ecliptic_lon, ecliptic_lat)
-    data_df.iloc[0,5] = ra
-    data_df.iloc[0,6] = dec
-    data_df.iloc[0,7:] = data_1darr.tolist()
+    data_df.iloc[0,7] = ra
+    data_df.iloc[0,8] = dec
+    data_df.iloc[0,9:] = data_1darr.tolist()
     data_all_df = pd.concat([data_all_df, data_df], ignore_index=True)
 
     del data_df

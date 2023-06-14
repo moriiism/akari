@@ -12,24 +12,26 @@
 # Setup:
 #   % source $akari_tool_dir/setup/setup.sh
 # Run:
+#   % python $akari_tool/preproc/fits_to_csv.py
 #   % python $akari_tool/preproc/add_stat.py
 #
 
 import os
 import sys
 import pandas as pd
+from akarilib import get_colname_lst_of_pixarr
 from akarilib import calc_norm_in_row_of_dataframe
 from akarilib import calc_stat_in_row_of_dataframe
 from akarilib import calc_feature_in_row_of_dataframe
-
 
 indir = os.environ["AKARI_ANA_DIR"]
 incsv = indir + "/" + "akari.csv"
 data_df = pd.read_csv(incsv)
 print(data_df)
 
-data_sel_df = data_df.drop(["file", "tzl_x", "tzl_y",
-                            "crval1", "crval2", "ra", "dec"], axis=1)
+colname_lst = get_colname_lst_of_pixarr()
+data_sel_df = data_df[colname_lst]
+
 data_norm_df = data_sel_df.apply(
     calc_norm_in_row_of_dataframe, axis=1)
 print(data_norm_df)

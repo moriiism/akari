@@ -50,3 +50,16 @@ print(data_df[["star_cat", "star_pos"]].value_counts())
 print("star_cat, star_pos, diff_tzl_x, diff_tzl_y")
 print(data_df[["star_cat", "star_pos",
                "diff_tzl_x", "diff_tzl_y"]].value_counts())
+
+print((data_df[data_df["star_cat"]==1]))
+data_sel_df = data_df[data_df["star_cat"]==1]
+
+print(data_sel_df[["file", "file_find"]])
+
+
+
+
+
+
+
+

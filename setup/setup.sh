@@ -3,8 +3,9 @@
 export PYTHONPATH=/home/morii/work/github/moriiism/akari
 export AKARI_TOOL_DIR=/home/morii/work/github/moriiism/akari
 # export AKARI_DATA_DIR=/home/morii/work/akari/data/spikethumb_20230105
-export AKARI_DATA_DIR=/home/morii/work/akari/data/spikethumb_20230407
-export AKARI_ANA_DIR=/home/morii/work/akari/ana/spikethumb_20230407
+# export AKARI_DATA_DIR=/home/morii/work/akari/data/spikethumb_20230616
+export AKARI_DATA_DIR=/home/morii/work/akari/data/spikethumb_20230616
+export AKARI_ANA_DIR=/home/morii/work/akari/ana/spikethumb_20230616
 
 echo "PYTHONPATH="$PYTHONPATH
 echo "AKARI_TOOL_DIR="$AKARI_TOOL_DIR

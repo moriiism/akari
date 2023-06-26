@@ -26,7 +26,7 @@ from akarilib import ecliptic_to_radec
 # TZ_X/TZ_Y
 # TZL_X/TZL_Y
 #  left side  (1 <= TZ_X < 64) : TZL_X = TZ_X, TZL_Y = TZ_Y
-#  right side (64 <= TZ_X)     : TZL_X = TZ_X - 63, TZL_Y = TZ_Y + 2
+#  right side (64 <= TZ_X)     : TZL_X = TZ_X - 64, TZL_Y = TZ_Y + 2
 # CRVAL1/2 (Ecliptic coordinate system, Longitude/Lattitude)
 colname_lst = (["file", "tz_x", "tz_y", "tzl_x", "tzl_y",
                 "crval1", "crval2", "ra", "dec"]

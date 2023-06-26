@@ -43,6 +43,8 @@ print(data_df["star_pos"].value_counts())
 # count nfind
 print("nfind")
 print(data_df["nfind"].value_counts())
+print(data_df[["star_cat", "nfind"]].value_counts())
+
 
 print("star_cat, star_pos")
 print(data_df[["star_cat", "star_pos"]].value_counts())

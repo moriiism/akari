@@ -1,7 +1,7 @@
 #
-# add_stat_fit.py
+# check_stat_fit.py
 #
-# add statistical values by gaussian fits
+# check gaussian fit
 #
 
 # Preparation:
@@ -15,30 +15,29 @@
 #   % python $akari_tool/preproc/fits_to_csv.py
 #   % python $akari_tool/preproc/add_stat.py
 #   % python $akari_tool/preproc/add_stat_fit.py
-#
+#   % python $akari_tool/preproc/check_stat_fit.py
 
 import os
 import sys
+import time
+import math
 import pandas as pd
-from akarilib import calc_2dgaussfit_in_row_of_dataframe
-from akarilib import get_colname_lst_of_pixarr_norm
+from akarilib import check_2dgaussfit_in_row_of_dataframe
 from akarilib import get_meshgrid_xybin_center
-import numpy as np
+from akarilib import get_colname_lst_of_pixarr_norm
 
 indir = os.environ["AKARI_ANA_DIR"]
-incsv = indir + "/" + "akari_stat.csv"
-data_df = pd.read_csv(incsv)
-print(data_df)
+incsv = indir + "/" + "akari_stat_fit.csv"
 
 colname_pixarr_norm_lst = get_colname_lst_of_pixarr_norm()
-data_pixarr_norm_df = pd.read_csv(
-    incsv, usecols=colname_pixarr_norm_lst)
-
-#import matplotlib.pyplot as plt
-#import matplotlib as mpl
-#mpl.use('Agg')
-
-#data_1darr = data_df.flatten()
+colname_lst = colname_pixarr_norm_lst + ["gfit_mu_x",
+                                         "gfit_mu_y",
+                                         "gfit_sigma_x",
+                                         "gfit_sigma_y",
+                                         "gfit_theta",
+                                         "gfit_norm",
+                                         "gfit_const"]
+data_df = pd.read_csv(incsv, usecols=colname_lst)
 
 # make mesh
 nbinx = 5
@@ -51,16 +50,11 @@ up_ybin_center = 1.0
     nbinx, lo_xbin_center, up_xbin_center,
     nbiny, lo_ybin_center, up_ybin_center)
 
-fit_stat_df = data_pixarr_norm_df.apply(
-    calc_2dgaussfit_in_row_of_dataframe,
+data_df.apply(
+    check_2dgaussfit_in_row_of_dataframe,
     args=(xbin_center_2darr, ybin_center_2darr), axis=1)
 
-data_add_df = pd.concat([data_df,
-                         fit_stat_df], axis=1)
-print(data_add_df)
 
-outdir = indir
-outcsv = outdir + "/" + "akari_stat_fit.csv"
-print(f"outcsv = {outcsv}")
-data_add_df.to_csv(outcsv, index=False)
+
+
 

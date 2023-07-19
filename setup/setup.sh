@@ -11,4 +11,6 @@ echo "PYTHONPATH="$PYTHONPATH
 echo "AKARI_TOOL_DIR="$AKARI_TOOL_DIR
 echo "AKARI_DATA_DIR="$AKARI_DATA_DIR
 echo "AKARI_ANA_DIR="$AKARI_ANA_DIR
+termtitle="spikethumb_20230616"
+PROMPT_COMMAND='echo -ne "\033]0;${termtitle}\007"'
 echo "setup done."

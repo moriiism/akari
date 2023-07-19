@@ -46,6 +46,9 @@ data_add_df = pd.concat([data_df,
                          data_stat_df,
                          data_feature_df], axis=1)
 print(data_add_df)
+#print(data_add_df.columns)
+#print(data_add_df["dark"].value_counts())
+
 
 outdir = indir
 outcsv = outdir + "/" + "akari_stat.csv"

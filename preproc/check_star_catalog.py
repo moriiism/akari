@@ -32,9 +32,18 @@ data_df = pd.read_csv(incsv)
 print(data_df)
 nrow = len(data_df)
 
-# count star_cat
-print("star_cat")
-print(data_df["star_cat"].value_counts())
+
+
+
+# count nstar_cat5
+print("nstar_cat5")
+print(data_df["nstar_cat5"].value_counts())
+
+# count nstar_cat10
+print("nstar_cat10")
+print(data_df["nstar_cat10"].value_counts())
+
+
 
 # count star_pos
 print("star_pos")
@@ -43,23 +52,30 @@ print(data_df["star_pos"].value_counts())
 # count nfind
 print("nfind")
 print(data_df["nfind"].value_counts())
-print(data_df[["star_cat", "nfind"]].value_counts())
+print(data_df[["nstar_cat5", "nfind"]].value_counts())
 
 
-print("star_cat, star_pos")
-print(data_df[["star_cat", "star_pos"]].value_counts())
+print("nstar_cat5, star_pos")
+print(data_df[["nstar_cat5", "star_pos"]].value_counts())
 
-print("star_cat, star_pos, diff_tzl_x, diff_tzl_y")
-print(data_df[["star_cat", "star_pos",
+print("nstar_cat10, star_pos")
+print(data_df[["nstar_cat10", "star_pos"]].value_counts())
+
+
+print("nstar_cat5, star_pos, diff_tzl_x, diff_tzl_y")
+print(data_df[["nstar_cat5", "star_pos",
                "diff_tzl_x", "diff_tzl_y"]].value_counts())
 
-print((data_df[data_df["star_cat"]==1]))
-data_sel_df = data_df[data_df["star_cat"]==1]
+print((data_df[data_df["nstar_cat5"]>=1]))
+data_sel_df = data_df[data_df["nstar_cat5"]>=1]
 
 print(data_sel_df[["file", "file_find"]])
 
 
 
+# count star_pos
+print("star_pos")
+print(data_df["star_pos"].value_counts())
 
 
 

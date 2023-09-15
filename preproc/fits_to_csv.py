@@ -29,7 +29,8 @@ from akarilib import ecliptic_to_radec
 #  right side (64 <= TZ_X)     : TZL_X = TZ_X - 64, TZL_Y = TZ_Y + 2
 # CRVAL1/2 (Ecliptic coordinate system, Longitude/Lattitude)
 colname_lst = (["file", "tz_x", "tz_y", "tzl_x", "tzl_y",
-                "crval1", "crval2", "ra", "dec", "dark"]
+                "crval1", "crval2", "ra", "dec", "dark",
+                "left", "edge"]
                + get_colname_lst_of_pixarr())
 data_all_df = pd.DataFrame([], columns=colname_lst)
 data_all_df = data_all_df.astype(float)
@@ -39,6 +40,8 @@ data_all_df['tz_y'] = data_all_df['tz_y'].astype(int)
 data_all_df['tzl_x'] = data_all_df['tzl_x'].astype(int)
 data_all_df['tzl_y'] = data_all_df['tzl_y'].astype(int)
 data_all_df['dark'] = data_all_df['dark'].astype(int)
+data_all_df['left'] = data_all_df['left'].astype(int)
+data_all_df['edge'] = data_all_df['edge'].astype(int)
 
 # file = "/home/morii/work/akari/data/spikethumb_20230407/
 # F0870074916_4NS_S091.fits.gz"
@@ -73,7 +76,20 @@ for dataname in data_lst:
         data_df.iloc[0,9] = 1
     else:
         data_df.iloc[0,9] = 0
-    data_df.iloc[0,10:] = data_1darr.tolist()
+
+    # left
+    if (hdu0.header["TZ_X"] < 64):
+        data_df.iloc[0,10] = 1
+    else:
+        data_df.iloc[0,10] = 0
+
+    # edge
+    if (hdu0.header["TZL_Y"] <= 4):
+        data_df.iloc[0,11] = 1
+    else:
+        data_df.iloc[0,11] = 0
+
+    data_df.iloc[0,12:] = data_1darr.tolist()
     data_all_df = pd.concat([data_all_df, data_df], ignore_index=True)
 
     del data_df
@@ -85,6 +101,8 @@ print(data_all_df)
 
 print(data_all_df.columns)
 print(data_all_df["dark"].value_counts())
+print(data_all_df["left"].value_counts())
+print(data_all_df["edge"].value_counts())
 
 outdir = os.environ["AKARI_ANA_DIR"]
 if (False == os.path.exists(outdir)):
@@ -93,4 +111,3 @@ if (False == os.path.exists(outdir)):
 outcsv = outdir + "/" + "akari.csv"
 print(f"outcsv = {outcsv}")
 data_all_df.to_csv(outcsv, index=False)
-

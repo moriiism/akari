@@ -59,6 +59,8 @@ data_add_df = pd.concat([data_df,
                          fit_stat_df], axis=1)
 print(data_add_df)
 print(data_add_df.columns)
+
+print("gfit_valid:")
 print(data_add_df["gfit_valid"].value_counts())
 
 outdir = indir

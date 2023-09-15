@@ -45,12 +45,9 @@ nrow_cat = len(cat_df)
 
 data_sel_df = data_df[["ra", "dec", "star_pos"]]
 flag_df = pd.DataFrame([], index=range(nrow),
-                       columns=["nstar_cat5",
-                                "nstar_cat10"])
-flag_df.loc[:, "nstar_cat5"] = 0
-flag_df.loc[:, "nstar_cat10"] = 0
-flag_df["nstar_cat5"] = flag_df["nstar_cat5"].astype(int)
-flag_df["nstar_cat10"] = flag_df["nstar_cat10"].astype(int)
+                       columns=["nstar_cat8"])
+flag_df.loc[:, "nstar_cat8"] = 0
+flag_df["nstar_cat8"] = flag_df["nstar_cat8"].astype(int)
 
 # count star_pos
 print(data_sel_df["star_pos"].value_counts())
@@ -59,7 +56,9 @@ for irow1 in range(len(data_sel_df)):
     ra = data_sel_df.loc[irow1, "ra"]
     dec = data_sel_df.loc[irow1, "dec"]
     star_pos = data_sel_df.loc[irow1, "star_pos"]
-    if(star_pos < 1):
+
+    # select within +-1 pixel
+    if(star_pos < 2):
         continue
 
     print(star_pos)
@@ -83,13 +82,9 @@ for irow1 in range(len(data_sel_df)):
             Angle(dec, units.degree),
             Angle(ra_cat, units.degree),
             Angle(dec_cat, units.degree))
-        if (separation.to(units.arcsec).value < 5):
-            flag_df.loc[irow1, "nstar_cat5"] += 1
-            print(irow1, irow2, "find5")
-            print(ra, dec, ra_cat, dec_cat)
-        if (separation.to(units.arcsec).value < 10):
-            flag_df.loc[irow1, "nstar_cat10"] += 1
-            print(irow1, irow2, "find10")
+        if (separation.to(units.arcsec).value <= 8):
+            flag_df.loc[irow1, "nstar_cat8"] += 1
+            print(irow1, irow2, "find8")
             print(ra, dec, ra_cat, dec_cat)
 
 
@@ -100,23 +95,21 @@ print(flag_df)
 data_add_df = pd.concat([data_df, flag_df], axis=1)
 print(data_add_df)
 
-# count nstar_cat5
-print("nstar_cat5")
-print(data_add_df["nstar_cat5"].value_counts())
-print("nstar_cat10")
-print(data_add_df["nstar_cat10"].value_counts())
+# count nstar_cat8
+print("nstar_cat8")
+print(data_add_df["nstar_cat8"].value_counts())
 
 # count star_pos
 print("star_pos")
 print(data_add_df["star_pos"].value_counts())
 
-# count nstar_cat5, star_pos
-print("nstar_cat5, star_pos")
-print(data_add_df[["nstar_cat5", "star_pos"]].value_counts())
+# count nstar_cat8, star_pos
+print("nstar_cat8, star_pos")
+print(data_add_df[["nstar_cat8", "star_pos"]].value_counts())
 
-# count nstar_cat5, star_pos, nfind, diff_tzl_x, diff_tzl_y
-print("nstar_cat5, star_pos, nfind, diff_tzl_x, diff_tzl_y")
-print(data_add_df[["nstar_cat5", "star_pos", "nfind",
+# count nstar_cat8, star_pos, nfind, diff_tzl_x, diff_tzl_y
+print("nstar_cat8, star_pos, nfind, diff_tzl_x, diff_tzl_y")
+print(data_add_df[["nstar_cat8", "star_pos", "nfind",
                    "diff_tzl_x", "diff_tzl_y"]].value_counts())
 
 

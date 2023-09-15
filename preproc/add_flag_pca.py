@@ -180,20 +180,3 @@ print(f"outcsv = {outcsv}")
 data_pca_df.to_csv(outcsv, index=False)
 
 
-## pca zoom
-#plt.scatter(data_pca_df['pc01'], data_pca_df['pc02'], s=1, c="b")
-#plt.xlim(-10.0, 15.0)
-#plt.ylim(-10.0, 15.0)
-#outfile_full = outdir + "/" + "pca_zoom.png"
-#print("outfile = ", outfile_full)
-#plt.savefig(outfile_full,
-#            bbox_inches='tight',
-#            pad_inches=0.1)
-#plt.cla()
-#plt.clf()
-#
-#print("len of data_pca_df = ", len(data_pca_df))
-
-#outlier_ser = (data_pca_df["pc01"] >= 15).astype("int")
-#outlier_ser.name = "outlier"
-#data_pca_outlier_df = pd.concat([data_pca_df, outlier_ser], axis=1)

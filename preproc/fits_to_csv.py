@@ -84,7 +84,7 @@ for dataname in data_lst:
         data_df.iloc[0,10] = 0
 
     # edge
-    if (hdu0.header["TZL_Y"] <= 4):
+    if (hdu0.header["TZ_Y"] <= 4):
         data_df.iloc[0,11] = 1
     else:
         data_df.iloc[0,11] = 0

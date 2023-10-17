@@ -40,12 +40,14 @@ print(data_df)
 data_left_df = data_df[(data_df["left"] == 1) & 
                        (data_df["dark"] == 0) &
                        (data_df["tz_y"] > 5) &
-                       (data_df["tzl_x"] > 7)]
+                       (data_df["tzl_x"] > 7) &
+                       (data_df["star_pos"] > 1)]
 data_left_df.reset_index(inplace=True, drop=True)
 data_right_df = data_df[(data_df["left"] == 0) & 
                         (data_df["dark"] == 0) &
                         (data_df["tz_y"] > 5) &
-                        (data_df["tzl_x"] > 7)]
+                        (data_df["tzl_x"] > 7) &
+                        (data_df["star_pos"] > 1)]
 data_right_df.reset_index(inplace=True, drop=True)
 
 data_2darr = data_left_df[["pc01", "pc02"]].values

@@ -1,5 +1,5 @@
 #
-# sel_pca_cluster.py
+# sel_pca_green_at_red_cluster.py
 #
 # select cluster found by plot_pca_cat.py
 #
@@ -20,7 +20,7 @@
 #   % python $akari_tool/preproc/add_flag_pca.py
 #   % python $akari_tool/plot_pca_cat/plot_pca_cat.py
 #   % python $akari_tool/plot_pca_cat/sel_pca_black_at_red_cluster/
-#            sel_pca_black_at_red_cluster.py
+#            sel_pca_green_at_red_cluster.py
 
 import os
 import numpy as np
@@ -85,26 +85,29 @@ pc02_up = pc02_mid + pc02_wid / 2.0
 ### left
 
 ### select cluster
-data_left_black_pc01_0to5_df = data_left_black_df[
-    (data_left_black_df['pc01'] > 0.0) &
-    (data_left_black_df['pc01'] < 5.0)]
+# 0 -- 5
+data_left_green_pc01_0to5_df = data_left_pm1pix_df[
+    (data_left_pm1pix_df['pc01'] > 0.0) &
+    (data_left_pm1pix_df['pc01'] < 5.0) &
+    (data_left_pm1pix_df['pc02'] > -5.0) &
+    (data_left_pm1pix_df['pc02'] < 5.0) & 
+    (data_left_pm1pix_df["nstar_cat8"] == 0)]
 
 outdir = indir
 outfile_full = (outdir + "/"
-                + "sel_pca_left_black_at_red_cluster_pc01_0to5.csv")
+                + "sel_pca_left_green_at_red_cluster_pc01_0to5.csv")
 print(outfile_full)
-data_left_black_pc01_0to5_df.to_csv(outfile_full, index=False)
+data_left_green_pc01_0to5_df.to_csv(outfile_full, index=False)
 
 # plot images in a pca cluster 
-outdir = outdir + "/" + "sel_pca_left_black_at_red_cluster_pc01_0to5"
+outdir = outdir + "/" + "sel_pca_left_green_at_red_cluster_pc01_0to5"
 if not os.path.exists(outdir):
     os.mkdir(outdir)
 
-
-for irow in data_left_black_pc01_0to5_df.index:
-    file_name = data_left_black_pc01_0to5_df.loc[irow, "file"]
-    tz_x = data_left_black_pc01_0to5_df.loc[irow, "tz_x"]
-    tz_y = data_left_black_pc01_0to5_df.loc[irow, "tz_y"]
+for irow in data_left_green_pc01_0to5_df.index:
+    file_name = data_left_green_pc01_0to5_df.loc[irow, "file"]
+    tz_x = data_left_green_pc01_0to5_df.loc[irow, "tz_x"]
+    tz_y = data_left_green_pc01_0to5_df.loc[irow, "tz_y"]
     print(file_name, tz_x, tz_y)
     data_dir = os.environ["AKARI_DATA_DIR"]
     file_name_full = data_dir + "/" + file_name
@@ -146,30 +149,29 @@ for irow in data_left_black_pc01_0to5_df.index:
     plt.close()
 
 
-
-############################
-# 5 - 10
-
-data_left_black_pc01_5to10_df = data_left_black_df[
-    (data_left_black_df['pc01'] > 5.0) &
-    (data_left_black_df['pc01'] < 10.0)]
+# 5 -- 10
+data_left_green_pc01_5to10_df = data_left_pm1pix_df[
+    (data_left_pm1pix_df['pc01'] > 5.0) &
+    (data_left_pm1pix_df['pc01'] < 10.0) &
+    (data_left_pm1pix_df['pc02'] > -5.0) &
+    (data_left_pm1pix_df['pc02'] < 5.0) & 
+    (data_left_pm1pix_df["nstar_cat8"] == 0)]
 
 outdir = indir
 outfile_full = (outdir + "/"
-                + "sel_pca_left_black_at_red_cluster_pc01_5to10.csv")
+                + "sel_pca_left_green_at_red_cluster_pc01_5to10.csv")
 print(outfile_full)
-data_left_black_pc01_5to10_df.to_csv(outfile_full, index=False)
+data_left_green_pc01_5to10_df.to_csv(outfile_full, index=False)
 
 # plot images in a pca cluster 
-outdir = outdir + "/" + "sel_pca_left_black_at_red_cluster_pc01_5to10"
+outdir = outdir + "/" + "sel_pca_left_green_at_red_cluster_pc01_5to10"
 if not os.path.exists(outdir):
     os.mkdir(outdir)
 
-
-for irow in data_left_black_pc01_5to10_df.index:
-    file_name = data_left_black_pc01_5to10_df.loc[irow, "file"]
-    tz_x = data_left_black_pc01_5to10_df.loc[irow, "tz_x"]
-    tz_y = data_left_black_pc01_5to10_df.loc[irow, "tz_y"]
+for irow in data_left_green_pc01_5to10_df.index:
+    file_name = data_left_green_pc01_5to10_df.loc[irow, "file"]
+    tz_x = data_left_green_pc01_5to10_df.loc[irow, "tz_x"]
+    tz_y = data_left_green_pc01_5to10_df.loc[irow, "tz_y"]
     print(file_name, tz_x, tz_y)
     data_dir = os.environ["AKARI_DATA_DIR"]
     file_name_full = data_dir + "/" + file_name
@@ -211,29 +213,29 @@ for irow in data_left_black_pc01_5to10_df.index:
     plt.close()
 
 
-############################
-# 10 - 15
-
-data_left_black_pc01_10to15_df = data_left_black_df[
-    (data_left_black_df['pc01'] > 10.0) &
-    (data_left_black_df['pc01'] < 15.0)]
+# 10 -- 15
+data_left_green_pc01_10to15_df = data_left_pm1pix_df[
+    (data_left_pm1pix_df['pc01'] > 10.0) &
+    (data_left_pm1pix_df['pc01'] < 15.0) &
+    (data_left_pm1pix_df['pc02'] > -5.0) &
+    (data_left_pm1pix_df['pc02'] < 5.0) & 
+    (data_left_pm1pix_df["nstar_cat8"] == 0)]
 
 outdir = indir
 outfile_full = (outdir + "/"
-                + "sel_pca_left_black_at_red_cluster_pc01_10to15.csv")
+                + "sel_pca_left_green_at_red_cluster_pc01_10to15.csv")
 print(outfile_full)
-data_left_black_pc01_10to15_df.to_csv(outfile_full, index=False)
+data_left_green_pc01_10to15_df.to_csv(outfile_full, index=False)
 
 # plot images in a pca cluster 
-outdir = outdir + "/" + "sel_pca_left_black_at_red_cluster_pc01_10to15"
+outdir = outdir + "/" + "sel_pca_left_green_at_red_cluster_pc01_10to15"
 if not os.path.exists(outdir):
     os.mkdir(outdir)
 
-
-for irow in data_left_black_pc01_10to15_df.index:
-    file_name = data_left_black_pc01_10to15_df.loc[irow, "file"]
-    tz_x = data_left_black_pc01_10to15_df.loc[irow, "tz_x"]
-    tz_y = data_left_black_pc01_10to15_df.loc[irow, "tz_y"]
+for irow in data_left_green_pc01_10to15_df.index:
+    file_name = data_left_green_pc01_10to15_df.loc[irow, "file"]
+    tz_x = data_left_green_pc01_10to15_df.loc[irow, "tz_x"]
+    tz_y = data_left_green_pc01_10to15_df.loc[irow, "tz_y"]
     print(file_name, tz_x, tz_y)
     data_dir = os.environ["AKARI_DATA_DIR"]
     file_name_full = data_dir + "/" + file_name
@@ -274,32 +276,33 @@ for irow in data_left_black_pc01_10to15_df.index:
     plt.clf()
     plt.close()
 
-
-################################
 
 ### right
 
 ### select cluster
-data_right_black_pc01_0to5_df = data_right_black_df[
-    (data_right_black_df['pc01'] > 0.0) &
-    (data_right_black_df['pc01'] < 5.0)]
+# 0 -- 5
+data_right_green_pc01_0to5_df = data_right_pm1pix_df[
+    (data_right_pm1pix_df['pc01'] > 0.0) &
+    (data_right_pm1pix_df['pc01'] < 5.0) &
+    (data_right_pm1pix_df['pc02'] > -5.0) &
+    (data_right_pm1pix_df['pc02'] < 5.0) & 
+    (data_right_pm1pix_df["nstar_cat8"] == 0)]
 
 outdir = indir
 outfile_full = (outdir + "/"
-                + "sel_pca_right_black_at_red_cluster_pc01_0to5.csv")
+                + "sel_pca_right_green_at_red_cluster_pc01_0to5.csv")
 print(outfile_full)
-data_right_black_pc01_0to5_df.to_csv(outfile_full, index=False)
+data_right_green_pc01_0to5_df.to_csv(outfile_full, index=False)
 
 # plot images in a pca cluster 
-outdir = outdir + "/" + "sel_pca_right_black_at_red_cluster_pc01_0to5"
+outdir = outdir + "/" + "sel_pca_right_green_at_red_cluster_pc01_0to5"
 if not os.path.exists(outdir):
     os.mkdir(outdir)
 
-
-for irow in data_right_black_pc01_0to5_df.index:
-    file_name = data_right_black_pc01_0to5_df.loc[irow, "file"]
-    tz_x = data_right_black_pc01_0to5_df.loc[irow, "tz_x"]
-    tz_y = data_right_black_pc01_0to5_df.loc[irow, "tz_y"]
+for irow in data_right_green_pc01_0to5_df.index:
+    file_name = data_right_green_pc01_0to5_df.loc[irow, "file"]
+    tz_x = data_right_green_pc01_0to5_df.loc[irow, "tz_x"]
+    tz_y = data_right_green_pc01_0to5_df.loc[irow, "tz_y"]
     print(file_name, tz_x, tz_y)
     data_dir = os.environ["AKARI_DATA_DIR"]
     file_name_full = data_dir + "/" + file_name
@@ -341,29 +344,29 @@ for irow in data_right_black_pc01_0to5_df.index:
     plt.close()
 
 
-############################
-# 5 - 10
-
-data_right_black_pc01_5to10_df = data_right_black_df[
-    (data_right_black_df['pc01'] > 5.0) &
-    (data_right_black_df['pc01'] < 10.0)]
+# 5 -- 10
+data_right_green_pc01_5to10_df = data_right_pm1pix_df[
+    (data_right_pm1pix_df['pc01'] > 5.0) &
+    (data_right_pm1pix_df['pc01'] < 10.0) &
+    (data_right_pm1pix_df['pc02'] > -5.0) &
+    (data_right_pm1pix_df['pc02'] < 5.0) & 
+    (data_right_pm1pix_df["nstar_cat8"] == 0)]
 
 outdir = indir
 outfile_full = (outdir + "/"
-                + "sel_pca_right_black_at_red_cluster_pc01_5to10.csv")
+                + "sel_pca_right_green_at_red_cluster_pc01_5to10.csv")
 print(outfile_full)
-data_right_black_pc01_5to10_df.to_csv(outfile_full, index=False)
+data_right_green_pc01_5to10_df.to_csv(outfile_full, index=False)
 
 # plot images in a pca cluster 
-outdir = outdir + "/" + "sel_pca_right_black_at_red_cluster_pc01_5to10"
+outdir = outdir + "/" + "sel_pca_right_green_at_red_cluster_pc01_5to10"
 if not os.path.exists(outdir):
     os.mkdir(outdir)
 
-
-for irow in data_right_black_pc01_5to10_df.index:
-    file_name = data_right_black_pc01_5to10_df.loc[irow, "file"]
-    tz_x = data_right_black_pc01_5to10_df.loc[irow, "tz_x"]
-    tz_y = data_right_black_pc01_5to10_df.loc[irow, "tz_y"]
+for irow in data_right_green_pc01_5to10_df.index:
+    file_name = data_right_green_pc01_5to10_df.loc[irow, "file"]
+    tz_x = data_right_green_pc01_5to10_df.loc[irow, "tz_x"]
+    tz_y = data_right_green_pc01_5to10_df.loc[irow, "tz_y"]
     print(file_name, tz_x, tz_y)
     data_dir = os.environ["AKARI_DATA_DIR"]
     file_name_full = data_dir + "/" + file_name
@@ -405,29 +408,29 @@ for irow in data_right_black_pc01_5to10_df.index:
     plt.close()
 
 
-############################
-# 10 - 15
-
-data_right_black_pc01_10to15_df = data_right_black_df[
-    (data_right_black_df['pc01'] > 10.0) &
-    (data_right_black_df['pc01'] < 15.0)]
+# 10 -- 15
+data_right_green_pc01_10to15_df = data_right_pm1pix_df[
+    (data_right_pm1pix_df['pc01'] > 10.0) &
+    (data_right_pm1pix_df['pc01'] < 15.0) &
+    (data_right_pm1pix_df['pc02'] > -5.0) &
+    (data_right_pm1pix_df['pc02'] < 5.0) & 
+    (data_right_pm1pix_df["nstar_cat8"] == 0)]
 
 outdir = indir
 outfile_full = (outdir + "/"
-                + "sel_pca_right_black_at_red_cluster_pc01_10to15.csv")
+                + "sel_pca_right_green_at_red_cluster_pc01_10to15.csv")
 print(outfile_full)
-data_right_black_pc01_10to15_df.to_csv(outfile_full, index=False)
+data_right_green_pc01_10to15_df.to_csv(outfile_full, index=False)
 
 # plot images in a pca cluster 
-outdir = outdir + "/" + "sel_pca_right_black_at_red_cluster_pc01_10to15"
+outdir = outdir + "/" + "sel_pca_right_green_at_red_cluster_pc01_10to15"
 if not os.path.exists(outdir):
     os.mkdir(outdir)
 
-
-for irow in data_right_black_pc01_10to15_df.index:
-    file_name = data_right_black_pc01_10to15_df.loc[irow, "file"]
-    tz_x = data_right_black_pc01_10to15_df.loc[irow, "tz_x"]
-    tz_y = data_right_black_pc01_10to15_df.loc[irow, "tz_y"]
+for irow in data_right_green_pc01_10to15_df.index:
+    file_name = data_right_green_pc01_10to15_df.loc[irow, "file"]
+    tz_x = data_right_green_pc01_10to15_df.loc[irow, "tz_x"]
+    tz_y = data_right_green_pc01_10to15_df.loc[irow, "tz_y"]
     print(file_name, tz_x, tz_y)
     data_dir = os.environ["AKARI_DATA_DIR"]
     file_name_full = data_dir + "/" + file_name
@@ -469,15 +472,17 @@ for irow in data_right_black_pc01_10to15_df.index:
     plt.close()
 
 
-print(data_left_black_pc01_0to5_df["tz_x"].value_counts())
-print(data_left_black_pc01_0to5_df["tz_y"].value_counts())
-print(data_left_black_pc01_5to10_df["tz_x"].value_counts())
-print(data_left_black_pc01_5to10_df["tz_y"].value_counts())
-print(data_left_black_pc01_10to15_df["tz_x"].value_counts())
-print(data_left_black_pc01_10to15_df["tz_y"].value_counts())
-print(data_right_black_pc01_0to5_df["tz_x"].value_counts())
-print(data_right_black_pc01_0to5_df["tz_y"].value_counts())
-print(data_right_black_pc01_5to10_df["tz_x"].value_counts())
-print(data_right_black_pc01_5to10_df["tz_y"].value_counts())
-print(data_right_black_pc01_10to15_df["tz_x"].value_counts())
-print(data_right_black_pc01_10to15_df["tz_y"].value_counts())
+print(data_left_green_pc01_0to5_df["tz_x"].value_counts())
+print(data_left_green_pc01_0to5_df["tz_y"].value_counts())
+print(data_left_green_pc01_5to10_df["tz_x"].value_counts())
+print(data_left_green_pc01_5to10_df["tz_y"].value_counts())
+print(data_left_green_pc01_10to15_df["tz_x"].value_counts())
+print(data_left_green_pc01_10to15_df["tz_y"].value_counts())
+
+print(data_right_green_pc01_0to5_df["tz_x"].value_counts())
+print(data_right_green_pc01_0to5_df["tz_y"].value_counts())
+print(data_right_green_pc01_5to10_df["tz_x"].value_counts())
+print(data_right_green_pc01_5to10_df["tz_y"].value_counts())
+print(data_right_green_pc01_10to15_df["tz_x"].value_counts())
+print(data_right_green_pc01_10to15_df["tz_y"].value_counts())
+

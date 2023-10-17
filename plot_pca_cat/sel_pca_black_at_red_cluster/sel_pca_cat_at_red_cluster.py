@@ -109,11 +109,12 @@ for irow in data_left_cat_pc01_0to5_df.index:
     data_dir = os.environ["AKARI_DATA_DIR"]
     file_name_full = data_dir + "/" + file_name
     print(file_name_full)
-
-    fig, ax = plt.subplots(1, 1)
     hdu = fits.open(file_name_full)
     hdu0 = hdu[0]
-    ax.imshow(hdu0.data)
+
+    fig, ax = plt.subplots(1, 1)
+    axi = ax.imshow(hdu0.data)
+    fig.colorbar(axi, ax=ax)
     title = f"{file_name}"
     xlabel = f"tz_x = {tz_x}"
     ylabel = f"tz_y = {tz_y}"
@@ -121,6 +122,21 @@ for irow in data_left_cat_pc01_0to5_df.index:
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     outfile_full = (outdir + "/" + file_name + ".png")
+    print("outfile = ", outfile_full)
+    plt.savefig(outfile_full,
+                bbox_inches='tight',
+                pad_inches=0.1)
+    plt.cla()
+    plt.clf()
+    plt.close()
+
+    fig, ax = plt.subplots(1, 1)
+    axi = ax.imshow(hdu0.data, norm="log")
+    fig.colorbar(axi, ax=ax)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    outfile_full = (outdir + "/" + file_name + "_log.png")
     print("outfile = ", outfile_full)
     plt.savefig(outfile_full,
                 bbox_inches='tight',
@@ -157,11 +173,12 @@ for irow in data_left_cat_pc01_5to10_df.index:
     data_dir = os.environ["AKARI_DATA_DIR"]
     file_name_full = data_dir + "/" + file_name
     print(file_name_full)
-
-    fig, ax = plt.subplots(1, 1)
     hdu = fits.open(file_name_full)
     hdu0 = hdu[0]
-    ax.imshow(hdu0.data)
+
+    fig, ax = plt.subplots(1, 1)
+    axi = ax.imshow(hdu0.data)
+    fig.colorbar(axi, ax=ax)
     title = f"{file_name}"
     xlabel = f"tz_x = {tz_x}"
     ylabel = f"tz_y = {tz_y}"
@@ -169,6 +186,21 @@ for irow in data_left_cat_pc01_5to10_df.index:
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     outfile_full = (outdir + "/" + file_name + ".png")
+    print("outfile = ", outfile_full)
+    plt.savefig(outfile_full,
+                bbox_inches='tight',
+                pad_inches=0.1)
+    plt.cla()
+    plt.clf()
+    plt.close()
+
+    fig, ax = plt.subplots(1, 1)
+    axi = ax.imshow(hdu0.data, norm="log")
+    fig.colorbar(axi, ax=ax)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    outfile_full = (outdir + "/" + file_name + "_log.png")
     print("outfile = ", outfile_full)
     plt.savefig(outfile_full,
                 bbox_inches='tight',
@@ -205,11 +237,12 @@ for irow in data_left_cat_pc01_10to15_df.index:
     data_dir = os.environ["AKARI_DATA_DIR"]
     file_name_full = data_dir + "/" + file_name
     print(file_name_full)
-
-    fig, ax = plt.subplots(1, 1)
     hdu = fits.open(file_name_full)
     hdu0 = hdu[0]
-    ax.imshow(hdu0.data)
+
+    fig, ax = plt.subplots(1, 1)
+    axi = ax.imshow(hdu0.data)
+    fig.colorbar(axi, ax=ax)
     title = f"{file_name}"
     xlabel = f"tz_x = {tz_x}"
     ylabel = f"tz_y = {tz_y}"
@@ -217,6 +250,21 @@ for irow in data_left_cat_pc01_10to15_df.index:
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     outfile_full = (outdir + "/" + file_name + ".png")
+    print("outfile = ", outfile_full)
+    plt.savefig(outfile_full,
+                bbox_inches='tight',
+                pad_inches=0.1)
+    plt.cla()
+    plt.clf()
+    plt.close()
+
+    fig, ax = plt.subplots(1, 1)
+    axi = ax.imshow(hdu0.data, norm="log")
+    fig.colorbar(axi, ax=ax)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    outfile_full = (outdir + "/" + file_name + "_log.png")
     print("outfile = ", outfile_full)
     plt.savefig(outfile_full,
                 bbox_inches='tight',
@@ -255,11 +303,12 @@ for irow in data_right_cat_pc01_0to5_df.index:
     data_dir = os.environ["AKARI_DATA_DIR"]
     file_name_full = data_dir + "/" + file_name
     print(file_name_full)
-
-    fig, ax = plt.subplots(1, 1)
     hdu = fits.open(file_name_full)
     hdu0 = hdu[0]
-    ax.imshow(hdu0.data)
+
+    fig, ax = plt.subplots(1, 1)
+    axi = ax.imshow(hdu0.data)
+    fig.colorbar(axi, ax=ax)
     title = f"{file_name}"
     xlabel = f"tz_x = {tz_x}"
     ylabel = f"tz_y = {tz_y}"
@@ -267,6 +316,21 @@ for irow in data_right_cat_pc01_0to5_df.index:
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     outfile_full = (outdir + "/" + file_name + ".png")
+    print("outfile = ", outfile_full)
+    plt.savefig(outfile_full,
+                bbox_inches='tight',
+                pad_inches=0.1)
+    plt.cla()
+    plt.clf()
+    plt.close()
+
+    fig, ax = plt.subplots(1, 1)
+    axi = ax.imshow(hdu0.data, norm="log")
+    fig.colorbar(axi, ax=ax)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    outfile_full = (outdir + "/" + file_name + "_log.png")
     print("outfile = ", outfile_full)
     plt.savefig(outfile_full,
                 bbox_inches='tight',
@@ -303,11 +367,12 @@ for irow in data_right_cat_pc01_5to10_df.index:
     data_dir = os.environ["AKARI_DATA_DIR"]
     file_name_full = data_dir + "/" + file_name
     print(file_name_full)
-
-    fig, ax = plt.subplots(1, 1)
     hdu = fits.open(file_name_full)
     hdu0 = hdu[0]
-    ax.imshow(hdu0.data)
+
+    fig, ax = plt.subplots(1, 1)
+    axi = ax.imshow(hdu0.data)
+    fig.colorbar(axi, ax=ax)
     title = f"{file_name}"
     xlabel = f"tz_x = {tz_x}"
     ylabel = f"tz_y = {tz_y}"
@@ -315,6 +380,21 @@ for irow in data_right_cat_pc01_5to10_df.index:
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     outfile_full = (outdir + "/" + file_name + ".png")
+    print("outfile = ", outfile_full)
+    plt.savefig(outfile_full,
+                bbox_inches='tight',
+                pad_inches=0.1)
+    plt.cla()
+    plt.clf()
+    plt.close()
+
+    fig, ax = plt.subplots(1, 1)
+    axi = ax.imshow(hdu0.data, norm="log")
+    fig.colorbar(axi, ax=ax)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    outfile_full = (outdir + "/" + file_name + "_log.png")
     print("outfile = ", outfile_full)
     plt.savefig(outfile_full,
                 bbox_inches='tight',
@@ -351,11 +431,12 @@ for irow in data_right_cat_pc01_10to15_df.index:
     data_dir = os.environ["AKARI_DATA_DIR"]
     file_name_full = data_dir + "/" + file_name
     print(file_name_full)
-
-    fig, ax = plt.subplots(1, 1)
     hdu = fits.open(file_name_full)
     hdu0 = hdu[0]
-    ax.imshow(hdu0.data)
+
+    fig, ax = plt.subplots(1, 1)
+    axi = ax.imshow(hdu0.data)
+    fig.colorbar(axi, ax=ax)
     title = f"{file_name}"
     xlabel = f"tz_x = {tz_x}"
     ylabel = f"tz_y = {tz_y}"
@@ -363,6 +444,21 @@ for irow in data_right_cat_pc01_10to15_df.index:
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     outfile_full = (outdir + "/" + file_name + ".png")
+    print("outfile = ", outfile_full)
+    plt.savefig(outfile_full,
+                bbox_inches='tight',
+                pad_inches=0.1)
+    plt.cla()
+    plt.clf()
+    plt.close()
+
+    fig, ax = plt.subplots(1, 1)
+    axi = ax.imshow(hdu0.data, norm="log")
+    fig.colorbar(axi, ax=ax)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    outfile_full = (outdir + "/" + file_name + "_log.png")
     print("outfile = ", outfile_full)
     plt.savefig(outfile_full,
                 bbox_inches='tight',

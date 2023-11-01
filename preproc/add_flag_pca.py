@@ -16,7 +16,6 @@
 #   % python $akari_tool/preproc/add_stat.py
 #   % python $akari_tool/preproc/add_stat_fit.py
 #   % python $akari_tool/preproc/add_flag_star_pos.py
-#   % python $akari_tool/preproc/add_flag_star_catalog.py
 #   % python $akari_tool/preproc/add_flag_pca.py
 #
 
@@ -31,22 +30,21 @@ from sklearn.cluster import KMeans
 from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
 from sklearn import mixture
+import pickle as pk
 
 # import seaborn as sns # visualize
 
 from akarilib import get_colname_lst_of_pixarr_norm
 
 indir = os.environ["AKARI_ANA_DIR"]
-incsv = indir + "/" + "akari_stat_fit_star_cat.csv"
+incsv = indir + "/" + "akari_stat_fit_star.csv"
 data_df = pd.read_csv(incsv)
 print(data_df)
 
 # remove dark and edge
 print(len(data_df))
 data_selrow_df = data_df[(data_df["dark"]==0) &
-                         (data_df["tz_y"] > 5)]
-# data_selrow_df = data_df[(data_df["dark"]==0)]
-
+                         (data_df["edge"]==0)]
 
 print(len(data_selrow_df))
 
@@ -87,8 +85,12 @@ print("ncomp_pca = ", ncomp_pca)
 
 # pca
 pca = PCA(n_components=ncomp_pca)
-# pca_ndarr = pca.fit_transform(data_selrow_selcol_sc_ndarr)
 pca.fit(data_selrow_selcol_sc_ndarr)
+out_pkl = indir + "/" + "pca.pkl"
+pk.dump(pca, open(out_pkl,"wb"))
+
+# pca_reload = pk.load(open(out_pkl,'rb'))
+# pca_ndarr = pca_reload.transform(data_selcol_sc_ndarr)
 pca_ndarr = pca.transform(data_selcol_sc_ndarr)
 print(pca_ndarr.shape)
 
@@ -178,7 +180,7 @@ plt.clf()
 
 
 outdir = indir
-outcsv = outdir + "/" + "akari_stat_fit_star_cat_pca.csv"
+outcsv = outdir + "/" + "akari_stat_fit_star_pca.csv"
 print(f"outcsv = {outcsv}")
 data_pca_df.to_csv(outcsv, index=False)
 

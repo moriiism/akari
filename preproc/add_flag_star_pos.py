@@ -53,6 +53,7 @@ data_sel_right_df.reset_index(inplace=True, drop=True)
 
 # loop for both hand side
 for irow1 in range(len(data_sel_df)):
+    print(irow1, nrow)
     tz_x = int(data_sel_df.loc[irow1, "tz_x"])
     file1 = data_sel_df.loc[irow1, "file"]
     tzl_x_1 = int(data_sel_df.loc[irow1, "tzl_x"])

@@ -16,6 +16,7 @@
 #   % python $akari_tool/preproc/add_stat.py
 #   % python $akari_tool/preproc/add_stat_fit.py
 #   % python $akari_tool/preproc/add_flag_star_pos.py
+
 #   % python $akari_tool/preproc/add_flag_star_catalog.py
 #
 
@@ -30,7 +31,7 @@ from astropy import units
 from akarilib import calc_angular_separation_in_row_of_dataframe
 
 indir = os.environ["AKARI_ANA_DIR"]
-incsv = indir + "/" + "akari_stat_fit_star.csv"
+incsv = indir + "/" + "akari_stat_fit_star_pca.csv"
 data_df = pd.read_csv(incsv)
 print(data_df)
 nrow = len(data_df)
@@ -114,6 +115,6 @@ print(data_add_df[["nstar_cat8", "star_pos", "nfind",
 
 
 outdir = indir
-outcsv = outdir + "/" + "akari_stat_fit_star_cat.csv"
+outcsv = outdir + "/" + "akari_stat_fit_star_pca_cat.csv"
 print(f"outcsv = {outcsv}")
 data_add_df.to_csv(outcsv, index=False)

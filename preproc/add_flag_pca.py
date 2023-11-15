@@ -19,6 +19,7 @@
 #   % python $akari_tool/preproc/add_flag_pca.py
 #
 
+import sys
 import os
 import numpy as np
 import matplotlib as mpl
@@ -35,6 +36,20 @@ import pickle as pk
 # import seaborn as sns # visualize
 
 from akarilib import get_colname_lst_of_pixarr_norm
+
+use_prefit = 0
+args = sys.argv
+nargs = len(args) - 1
+print(nargs)
+if (1 == nargs):
+    use_prefit = int(args[1])
+    print("use_prefit = ", use_prefit)
+    pass
+else:
+    print('usage: python add_flag_pca.py 1/0')
+    print('usage: arg1 means that use prefit(1) or not(0).')
+    print('Arguments are not 1.')
+    exit()
 
 indir = os.environ["AKARI_ANA_DIR"]
 incsv = indir + "/" + "akari_stat_fit_star.csv"
@@ -84,13 +99,19 @@ ncomp_pca = data_selrow_selcol_sc_ndarr.shape[1]
 print("ncomp_pca = ", ncomp_pca)
 
 # pca
-pca = PCA(n_components=ncomp_pca)
-pca.fit(data_selrow_selcol_sc_ndarr)
-out_pkl = indir + "/" + "pca.pkl"
-pk.dump(pca, open(out_pkl,"wb"))
+pca = None
+if (use_prefit == 0):
+    pca = PCA(n_components=ncomp_pca)
+    pca.fit(data_selrow_selcol_sc_ndarr)
+    out_pkl = indir + "/" + "pca.pkl"
+    pk.dump(pca, open(out_pkl,"wb"))
+elif (use_prefit == 1):
+    prefit_pkl = os.environ["PCA_MODEL"]
+    pca = pk.load(open(prefit_pkl,'rb'))
+else:
+    print("bad use_prefit = ", use_prefit)
+    exit()
 
-# pca_reload = pk.load(open(out_pkl,'rb'))
-# pca_ndarr = pca_reload.transform(data_selcol_sc_ndarr)
 pca_ndarr = pca.transform(data_selcol_sc_ndarr)
 print(pca_ndarr.shape)
 

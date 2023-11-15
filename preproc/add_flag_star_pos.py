@@ -29,7 +29,7 @@ print(data_df)
 nrow = len(data_df)
 
 data_sel_df = data_df[["file", "left", 
-                       "tz_x", "tz_y", "tzl_x", "tzl_y"]]
+                       "tz_x", "tz_y", "tzl_x", "tzl_y", "ti"]]
 flag_df = pd.DataFrame([], index=range(nrow),
                        columns=["nfind",
                                 "file_find", 
@@ -58,6 +58,7 @@ for irow1 in range(len(data_sel_df)):
     file1 = data_sel_df.loc[irow1, "file"]
     tzl_x_1 = int(data_sel_df.loc[irow1, "tzl_x"])
     tzl_y_1 = int(data_sel_df.loc[irow1, "tzl_y"])
+    ti_1 = int(data_sel_df.loc[irow1, "ti"])
     file1_split = file1.split(".")
     (obsid1, dummy, sernum1) = file1_split[0].split("_")
 
@@ -65,11 +66,15 @@ for irow1 in range(len(data_sel_df)):
     file_find_lst = []
     if (data_sel_df.loc[irow1, "left"] == 1):
         # loop for right hand side
-        for irow2 in range(len(data_sel_right_df)):
-            tz_x = int(data_sel_right_df.loc[irow2, "tz_x"])
-            file2 = data_sel_right_df.loc[irow2, "file"]
-            tzl_x_2 = int(data_sel_right_df.loc[irow2, "tzl_x"])
-            tzl_y_2 = int(data_sel_right_df.loc[irow2, "tzl_y"])
+        data_sel_right_selti_df = (
+            data_sel_right_df[data_sel_right_df["ti"]==ti_1])
+        data_sel_right_selti_df.reset_index(inplace=True, drop=True)
+
+        for irow2 in range(len(data_sel_right_selti_df)):
+            tz_x = int(data_sel_right_selti_df.loc[irow2, "tz_x"])
+            file2 = data_sel_right_selti_df.loc[irow2, "file"]
+            tzl_x_2 = int(data_sel_right_selti_df.loc[irow2, "tzl_x"])
+            tzl_y_2 = int(data_sel_right_selti_df.loc[irow2, "tzl_y"])
             file2_split = file2.split(".")
             (obsid2, dummy, sernum2) = file2_split[0].split("_")
 
@@ -106,14 +111,20 @@ for irow1 in range(len(data_sel_df)):
                         flag_df.loc[irow1, "diff_tzl_x"] = diff_tzl_x
                         flag_df.loc[irow1, "diff_tzl_y"] = diff_tzl_y
                     file_find_lst.append(file2)
+
+        del data_sel_right_selti_df
     else:
         # data_sel_df.loc[irow1, "left"] == 0
         # loop for left hand side
-        for irow2 in range(len(data_sel_left_df)):
-            tz_x = int(data_sel_left_df.loc[irow2, "tz_x"])
-            file2 = data_sel_left_df.loc[irow2, "file"]
-            tzl_x_2 = int(data_sel_left_df.loc[irow2, "tzl_x"])
-            tzl_y_2 = int(data_sel_left_df.loc[irow2, "tzl_y"])
+        data_sel_left_selti_df = (
+            data_sel_left_df[data_sel_left_df["ti"]==ti_1])
+        data_sel_left_selti_df.reset_index(inplace=True, drop=True)
+
+        for irow2 in range(len(data_sel_left_selti_df)):
+            tz_x = int(data_sel_left_selti_df.loc[irow2, "tz_x"])
+            file2 = data_sel_left_selti_df.loc[irow2, "file"]
+            tzl_x_2 = int(data_sel_left_selti_df.loc[irow2, "tzl_x"])
+            tzl_y_2 = int(data_sel_left_selti_df.loc[irow2, "tzl_y"])
             file2_split = file2.split(".")
             (obsid2, dummy, sernum2) = file2_split[0].split("_")
 
@@ -150,7 +161,8 @@ for irow1 in range(len(data_sel_df)):
                         flag_df.loc[irow1, "diff_tzl_x"] = diff_tzl_x
                         flag_df.loc[irow1, "diff_tzl_y"] = diff_tzl_y
                     file_find_lst.append(file2)
-
+        
+        del data_sel_left_selti_df
     if nfind > 0:
         print(file_find_lst)
 

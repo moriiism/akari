@@ -53,12 +53,14 @@ print("ndata = ", ndata)
 
 colname_lst = []
 if (1 == flag_crval):
-    colname_lst = (["file", "tz_x", "tz_y", "tzl_x", "tzl_y", "ti", "id",
+    colname_lst = (["file", "tz_x", "tz_y", "tzl_x", "tzl_y",
+                    "ti", "id", "af_tim",
                     "crval1", "crval2", "ra", "dec", 
                     "dark", "left", "edge"]
                    + get_colname_lst_of_pixarr())
 elif (0 == flag_crval):
-    colname_lst = (["file", "tz_x", "tz_y", "tzl_x", "tzl_y", "ti", "id",
+    colname_lst = (["file", "tz_x", "tz_y", "tzl_x", "tzl_y",
+                    "ti", "id", "af_tim",
                     "dark", "left", "edge"]
                    + get_colname_lst_of_pixarr())
 else:
@@ -78,6 +80,7 @@ data_all_df['left'] = data_all_df['left'].astype(int)
 data_all_df['edge'] = data_all_df['edge'].astype(int)
 data_all_df['ti']   = data_all_df['ti'].astype(int)
 data_all_df['id']   = data_all_df['id'].astype(int)
+data_all_df['af_tim']   = data_all_df['af_tim'].astype(int)
 
 data_df = pd.DataFrame(index=range(1), columns=colname_lst)
 data_df.fillna(0, inplace=True)
@@ -92,6 +95,7 @@ data_df['left'] = data_df['left'].astype(int)
 data_df['edge'] = data_df['edge'].astype(int)
 data_df['ti']   = data_df['ti'].astype(int)
 data_df['id']   = data_df['id'].astype(int)
+data_df['af_tim']   = data_df['af_tim'].astype(int)
 data_df.loc[0] = 0
 
 idata = 0
@@ -108,6 +112,7 @@ for dataname in data_lst:
     data_df.loc[0,"tzl_y"] = hdu0.header["TZL_Y"]
     data_df.loc[0,"ti"] = hdu0.header["CSDS_TI"]
     data_df.loc[0,"id"] = hdu0.header["FRAME_ID"]
+    data_df.loc[0,"af_tim"] = hdu0.header["AF_TIM"]
 
     if (flag_crval == 1):
         data_df.loc[0,"crval1"] = hdu0.header["CRVAL1"]

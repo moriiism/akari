@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export PYTHONPATH=/home/morii/work/github/moriiism/akari/spectrum
+export PYTHONPATH=/home/morii/work/github/moriiism/akari
 export AKARI_TOOL_DIR=/home/morii/work/github/moriiism/akari/spectrum
 export AKARI_DATA_DIR=/home/morii/work/akari/data/spectrum
 export AKARI_ANA_DIR=/home/morii/work/akari/ana/spectrum

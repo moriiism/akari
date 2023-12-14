@@ -90,21 +90,24 @@ def get_rebin_xloup_lst(xlo, xup, npix_rebin):
 
 
 def extract_spectrum_from_img_2darr(img_2darr, outdir,
-                                    index_zaxis, region_id, npix_rebin,
+                                    index_zaxis, region_id,
+                                    npix_rebin,
                                     xlo, xup, ylo, yup):
     print(img_2darr[xlo:xup+1,ylo:yup+1].shape)
     mean_1darr = img_2darr[xlo:xup+1,ylo:yup+1].mean(axis=0)
     index_arr = np.arange(ylo, yup+1)
     stddev_1darr = np.zeros(index_arr.size)
     if (npix_rebin >= 2):
-        stddev_1darr = img_2darr[xlo:xup+1,ylo:yup+1].std(ddof=1, axis=0)
+        stddev_1darr = img_2darr[xlo:xup+1,ylo:yup+1].std(
+            ddof=1, axis=0)
         stddev_1darr /= np.sqrt(npix_rebin)
     plt.errorbar(index_arr, mean_1darr, yerr=stddev_1darr,
                  marker='o', capthick=1, lw=1)
-    outfile_full = (outdir + "/" + 
-                    "spec_z%1.1d_reg%1.1d_rebin%2.2d_%3.3d-%3.3d.png" % (
-                        index_zaxis, region_id, npix_rebin,
-                        xlo, xup))
+    outfile_full = (
+        outdir + "/" + 
+        "spec_z%1.1d_reg%1.1d_rebin%2.2d_%3.3d-%3.3d.png" % (
+            index_zaxis, region_id, npix_rebin,
+            xlo, xup))
     print("outfile = ", outfile_full)
     plt.savefig(outfile_full,
                 bbox_inches='tight',
@@ -112,6 +115,50 @@ def extract_spectrum_from_img_2darr(img_2darr, outdir,
     plt.cla()
     plt.clf()
     plt.close()
+
+
+def extract_spectrum_from_img_2darr_multi(img_2darr, outdir,
+                                          index_zaxis, region_id,
+                                          npix_rebin,
+                                          xloup_lst,
+                                          ylo, yup):
+
+    fig, ax = plt.subplots(len(xloup_lst), 1)
+    ibin = 0
+    for xloup in xloup_lst:
+        (xlo, xup) = xloup
+        print(img_2darr[xlo:xup+1,ylo:yup+1].shape)
+        mean_1darr = img_2darr[xlo:xup+1,ylo:yup+1].mean(axis=0)
+        index_arr = np.arange(ylo, yup+1)
+        stddev_1darr = np.zeros(index_arr.size)
+        if (npix_rebin >= 2):
+            stddev_1darr = img_2darr[xlo:xup+1,ylo:yup+1].std(
+                ddof=1, axis=0)
+            stddev_1darr /= np.sqrt(npix_rebin)
+        if (len(xloup_lst) >= 2): 
+            ax[ibin].errorbar(index_arr, mean_1darr, yerr=stddev_1darr,
+                              marker='o', capthick=1, lw=1)
+        elif (len(xloup_lst) == 1): 
+            ax.errorbar(index_arr, mean_1darr, yerr=stddev_1darr,
+                        marker='o', capthick=1, lw=1)
+        else:
+            print("error")
+            exit()
+        
+        ibin += 1
+
+    outfile_full = (
+        outdir + "/" + 
+        "spec_z%1.1d_reg%1.1d_rebin%2.2d.png" % (
+            index_zaxis, region_id, npix_rebin))
+    print("outfile = ", outfile_full)
+    plt.savefig(outfile_full,
+                bbox_inches='tight',
+                pad_inches=0.1)
+    plt.cla()
+    plt.clf()
+    plt.close()
+
 
 def extract_spectrum_from_fits(infile, outdir):
     # image size: (512, 412)
@@ -134,9 +181,16 @@ def extract_spectrum_from_fits(infile, outdir):
                 xloup_lst = get_rebin_xloup_lst(xlo, xup, npix_rebin)
                 for xloup in xloup_lst:
                     (xlo_this, xup_this) = xloup
-                    extract_spectrum_from_img_2darr(img_2darr, outdir,
-                                                    index_zaxis, region_id,
-                                                    npix_rebin,
-                                                    xlo_this, xup_this,
-                                                    ylo, yup)
+                    extract_spectrum_from_img_2darr(
+                        img_2darr, outdir,
+                        index_zaxis, region_id,
+                        npix_rebin,
+                        xlo_this, xup_this,
+                        ylo, yup)
 
+                extract_spectrum_from_img_2darr_multi(
+                    img_2darr, outdir,
+                    index_zaxis, region_id,
+                    npix_rebin,
+                    xloup_lst,
+                    ylo, yup)

@@ -39,8 +39,8 @@ ana_root_dir = os.path.dirname(indir)
 print("data_id = ", data_id)
 print("ana_root_dir = ", ana_root_dir)
 
-if ((data_id == "stm13") or
-    (data_id == "stm43")):
+if ((data_id == "stm13") or (data_id == "stm13r") or
+    (data_id == "stm43") or (data_id == "stm43")):
     nrow_1 = 0
     nrow_2 = 0
     nrow_3 = 0
@@ -81,7 +81,7 @@ if ((data_id == "stm13") or
     print(f"outcsv = {outcsv}")
     data_3_df.to_csv(outcsv, index=False)
 
-elif (data_id == "stm63"):
+elif ((data_id == "stm63") or (data_id == "stm63r")):
     nrow_1 = 0
     nrow_2 = 0
     nrow_3 = 0

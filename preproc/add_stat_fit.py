@@ -33,6 +33,7 @@ print(data_df)
 colname_pixarr_norm_lst = get_colname_lst_of_pixarr_norm()
 data_pixarr_norm_df = pd.read_csv(
     incsv, usecols=colname_pixarr_norm_lst)
+data_pixarr_norm_df["index"] = data_pixarr_norm_df.index
 
 #import matplotlib.pyplot as plt
 #import matplotlib as mpl

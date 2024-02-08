@@ -52,7 +52,7 @@ else:
     exit()
 
 indir = os.environ["AKARI_ANA_DIR"]
-incsv = indir + "/" + "akari_stat_fit_star.csv"
+incsv = indir + "/" + "akari_stat_fit_star_cat.csv"
 data_df = pd.read_csv(incsv)
 print(data_df)
 
@@ -80,6 +80,7 @@ colname_lst = colname_pixarr_norm_lst + ["sum",
                                          "gfit_norm",
                                          "gfit_const",
                                          "gfit_valid"]
+#                                         "ave_margin"]
 
 data_selrow_selcol_df = data_selrow_df[colname_lst]
 print(data_selrow_selcol_df.columns)
@@ -127,6 +128,8 @@ plt.scatter(data_pca_df['pc01'], data_pca_df['pc02'], s=1, c="b")
 plt.title("PC")
 plt.xlabel("pc01")
 plt.ylabel("pc02")
+plt.xlim(-5, 40.0)
+plt.ylim(-20, 20)
 plt.grid(True, linestyle='--')
 
 outdir = indir
@@ -201,7 +204,7 @@ plt.clf()
 
 
 outdir = indir
-outcsv = outdir + "/" + "akari_stat_fit_star_pca.csv"
+outcsv = outdir + "/" + "akari_stat_fit_star_cat_pca.csv"
 print(f"outcsv = {outcsv}")
 data_pca_df.to_csv(outcsv, index=False)
 

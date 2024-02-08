@@ -3,25 +3,6 @@ from akarilib import gini
 from astropy import units
 from astropy.coordinates import angular_separation, Angle
 
-
-def calc_feature_in_row_of_dataframe(row_ser):
-    # call by data_frame.apply(
-    #   calc_feature_in_row_of_dataframe, axis=1)
-    row_sel_ser = row_ser.drop("sum")
-    row_feature_ser = pd.Series([], dtype=float)
-    peak = row_sel_ser["x02y02_norm"]
-    around = (row_sel_ser["x01y01_norm"]
-              + row_sel_ser["x01y02_norm"]
-              + row_sel_ser["x01y03_norm"]
-              + row_sel_ser["x02y01_norm"]
-              + row_sel_ser["x02y03_norm"]
-              + row_sel_ser["x03y01_norm"]
-              + row_sel_ser["x03y02_norm"]
-              + row_sel_ser["x03y03_norm"]) / 8.0
-    ratio_around_to_peak = around / peak
-    row_feature_ser["ratio_around_to_peak"] = ratio_around_to_peak
-    return row_feature_ser
-
 def calc_norm_in_row_of_dataframe(row_ser):
     # call by data_frame.apply(calc_norm_in_row_of_dataframe, axis=1)
     row_norm_ser = row_ser.copy()
@@ -43,6 +24,41 @@ def calc_stat_in_row_of_dataframe(row_ser):
     row_stat_ser["norm_kurt"] = row_sel_ser.kurt()
     row_stat_ser["norm_gini"] = gini(row_sel_ser.values)
     return row_stat_ser
+
+def calc_feature_in_row_of_dataframe(row_ser):
+    # call by data_frame.apply(
+    #   calc_feature_in_row_of_dataframe, axis=1)
+    row_feature_ser = pd.Series([], dtype=float)
+    peak = row_ser["x02y02_norm"]
+    around = (row_ser["x01y01_norm"]
+              + row_ser["x01y02_norm"]
+              + row_ser["x01y03_norm"]
+              + row_ser["x02y01_norm"]
+              + row_ser["x02y03_norm"]
+              + row_ser["x03y01_norm"]
+              + row_ser["x03y02_norm"]
+              + row_ser["x03y03_norm"]) / 8.0
+    ratio_around_to_peak = around / peak
+    row_feature_ser["ratio_around_to_peak"] = ratio_around_to_peak
+    ave_margin = (row_ser["x00y00_norm"]
+                  + row_ser["x00y01_norm"]
+                  + row_ser["x00y02_norm"]
+                  + row_ser["x00y03_norm"]
+                  + row_ser["x00y04_norm"]
+                  + row_ser["x01y00_norm"]
+                  + row_ser["x01y04_norm"]
+                  + row_ser["x02y00_norm"]
+                  + row_ser["x02y04_norm"]
+                  + row_ser["x03y00_norm"]
+                  + row_ser["x03y04_norm"]
+                  + row_ser["x04y00_norm"]
+                  + row_ser["x04y01_norm"]
+                  + row_ser["x04y02_norm"]
+                  + row_ser["x04y03_norm"]
+                  + row_ser["x04y04_norm"]) / 16.0
+    row_feature_ser["ave_margin"] = ave_margin
+    return row_feature_ser
+
 
 def calc_angular_separation_in_row_of_dataframe(
         row_ser, ra, dec):

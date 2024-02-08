@@ -64,7 +64,8 @@ def calc_2dgaussfit_in_row_of_dataframe(row_ser,
 
     xybin_center_2darr = np.array([xbin_center_2darr.ravel(),
                                    ybin_center_2darr.ravel()])
-    zval_1darr = row_ser.values
+    index      = int(row_ser.values[-1])
+    zval_1darr = row_ser.values[:-1]
 
     # for initial vlaue
     zval_nomax_1darr = np.delete(zval_1darr, np.argmax(zval_1darr))
@@ -126,7 +127,9 @@ def calc_2dgaussfit_in_row_of_dataframe(row_ser,
     popt_ser["gfit_norm"] = popt[5]
     popt_ser["gfit_const"] = popt[6]
     popt_ser["gfit_valid"] = valid_2dgauss
-    print(popt_ser)
+
+    if (index % 1000 == 0):
+        print(index)
 
     return popt_ser
 

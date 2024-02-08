@@ -27,25 +27,30 @@ from akarilib import calc_feature_in_row_of_dataframe
 indir = os.environ["AKARI_ANA_DIR"]
 incsv = indir + "/" + "akari.csv"
 data_df = pd.read_csv(incsv)
+print(data_df.columns)
 print(data_df)
 
 colname_lst = get_colname_lst_of_pixarr()
 data_sel_df = data_df[colname_lst]
+print(data_sel_df.columns)
 
 data_norm_df = data_sel_df.apply(
     calc_norm_in_row_of_dataframe, axis=1)
-print(data_norm_df)
+print(data_norm_df.columns)
+
 data_stat_df = data_norm_df.apply(
     calc_stat_in_row_of_dataframe, axis=1)
-print(data_stat_df)
+print(data_stat_df.columns)
+
 data_feature_df = data_norm_df.apply(
     calc_feature_in_row_of_dataframe, axis=1)
+print(data_feature_df.columns)
 
 data_add_df = pd.concat([data_df,
                          data_norm_df,
                          data_stat_df,
                          data_feature_df], axis=1)
-print(data_add_df)
+print(data_add_df.columns)
 
 outdir = indir
 outcsv = outdir + "/" + "akari_stat.csv"

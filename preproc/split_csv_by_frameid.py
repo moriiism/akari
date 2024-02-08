@@ -40,7 +40,7 @@ print("data_id = ", data_id)
 print("ana_root_dir = ", ana_root_dir)
 
 if ((data_id == "stm13") or (data_id == "stm13r") or
-    (data_id == "stm43") or (data_id == "stm43")):
+    (data_id == "stm43") or (data_id == "stm43r")):
     nrow_1 = 0
     nrow_2 = 0
     nrow_3 = 0

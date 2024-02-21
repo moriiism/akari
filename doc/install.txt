@@ -1,0 +1,10 @@
+
+# install module for local user directory
+pip install astropy --user
+pip install pandas --user
+pip install matplotlib --user
+pip install scipy --user
+
+
+
+

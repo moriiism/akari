@@ -1,5 +1,5 @@
 #
-# gmm_margin.py
+# gmm_margin_2d_2cl.py
 #
 
 # Preparation:
@@ -74,7 +74,7 @@ incsv = ""
 if (0 == flag_cat):
     incsv = indir + "/" + "akari_stat_fit_star_pca_margin.csv"
 elif (1 == flag_cat):
-    incsv = indir + "/" + "akari_stat_fit_star_pca_margin_cat.csv"
+    incsv = indir + "/" + "akari_stat_fit_star_cat_pca_margin.csv"
 else:
     print("bad flag_cat = ", flag_cat)
     exit()

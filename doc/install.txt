@@ -1,10 +1,8 @@
-
 # install module for local user directory
+# pip install <package> --user
+
 pip install astropy --user
 pip install pandas --user
 pip install matplotlib --user
 pip install scipy --user
-
-
-
-
+pip install scikit-learn --user

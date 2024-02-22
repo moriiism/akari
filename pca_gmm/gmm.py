@@ -1,22 +1,6 @@
 #
-# gmm_margin_2d_2cl.py
+# gmm.py
 #
-
-# Preparation:
-#   % conda install astropy
-#   % conda install scikit-learn
-#   % conda install matplotlib
-#
-# Setup:
-#   % source $akari_tool_dir/setup/setup.sh
-# Run:
-#   % python $akari_tool/preproc/fits_to_csv.py
-#   % python $akari_tool/preproc/add_stat.py
-#   % python $akari_tool/preproc/add_stat_fit.py
-#   % python $akari_tool/preproc/add_flag_star_pos.py
-#   % python $akari_tool/preproc/add_flag_pca_margin.py
-#   % python $akari_tool/preproc/add_flag_star_catalog.py
-#   % python $akari_tool/plot_gmm/gmm_margin_2d_2cl.py
 
 import sys
 import os
@@ -34,47 +18,51 @@ import pickle as pk
 
 # import seaborn as sns # visualize
 
-# python gmm_2d_2cl.py 0 1 -5 40 -20 20
-
-
+# python3 gmm.py 0 0 1 -5 40 -20 20
 
 flag_cat = 0
+pca_feature = 0
 use_prefit = 0
 args = sys.argv
 nargs = len(args) - 1
 print(nargs)
-if (6 == nargs):
+if (7 == nargs):
     flag_cat = int(args[1])
-    use_prefit = int(args[2])
-    pc01_lo_str = args[3]
-    pc01_up_str = args[4]
-    pc02_lo_str = args[5]
-    pc02_up_str = args[6]
+    pca_feature = int(args[2])
+    use_prefit = int(args[3])
+    pc01_lo_str = args[4]
+    pc01_up_str = args[5]
+    pc02_lo_str = args[6]
+    pc02_up_str = args[7]
     print("flag_cat = ", flag_cat)
+    print("pca_feature = ", pca_feature)
     print("use_prefit = ", use_prefit)
     print("pc01_lo_str = ", pc01_lo_str)
     print("pc01_up_str = ", pc01_up_str)
     print("pc02_lo_str = ", pc02_lo_str)
     print("pc02_up_str = ", pc02_up_str)
-    pass
 else:
-    print('usage: python gmm_margin_2d_2cl.py 1/0 1/0 ' +
+    print('usage: python3 gmm.py flag_cat pca_feature use_prefit ' +
           'pc01_lo pc01_up pc02_lo pc02_up')
-    print('usage: arg1 means that csv files contain ' +
+    print('usage: flag_cat means that csv files contain ' +
           'catalog(1) or not(0).')
-    print('usage: arg2 means that use prefit(1) or not(0).')
-    print('usage: arg3, 4, 5, 6 means ' +
+    print('usage: pca_feature means type of features for pca calculation.')    
+    print('usage: use_prefit means that use prefit(1) or not(0).')
+    print('usage: arg4, 5, 6, 7 means ' +
           'pc01_lo pc01_up pc02_lo pc02_up.' +
           'Set 4 values or def def def def.')
-    print('Arguments are not 6.')
+    print('Arguments are not 7.')
     exit()
 
+pca_tag_str = "pca_%d" % pca_feature
+gmm_tag_str = "gmm_%d" % pca_feature
+    
 indir = os.environ["AKARI_ANA_DIR"]
 incsv = ""
 if (0 == flag_cat):
-    incsv = indir + "/" + "akari_stat_fit_star_pca_margin.csv"
+    incsv = indir + "/" + ("akari_stat_fit_star_%s.csv" % pca_tag_str)
 elif (1 == flag_cat):
-    incsv = indir + "/" + "akari_stat_fit_star_cat_pca_margin.csv"
+    incsv = indir + "/" + ("akari_stat_fit_star_cat_%s.csv" % pca_tag_str)
 else:
     print("bad flag_cat = ", flag_cat)
     exit()
@@ -84,14 +72,12 @@ print(data_df)
 
 data_left_df = data_df[(data_df["left"] == 1) & 
                        (data_df["dark"] == 0) &
-                       (data_df["tz_y"] > 5) &
-                       (data_df["tzl_x"] > 7) &
+                       (data_df["edge"] == 0) &
                        (data_df["star_pos"] > 1)]
 data_left_df.reset_index(inplace=True, drop=True)
 data_right_df = data_df[(data_df["left"] == 0) & 
                         (data_df["dark"] == 0) &
-                        (data_df["tz_y"] > 5) &
-                        (data_df["tzl_x"] > 7) &
+                        (data_df["edge"] == 0) &
                         (data_df["star_pos"] > 1)]
 data_right_df.reset_index(inplace=True, drop=True)
 
@@ -100,13 +86,11 @@ print(data_2darr)
 print(type(data_2darr))
 
 
-### get min and max for scatter plot range
-
+###  scatter plot range
 pc01_lo = 0.0
 pc01_up = 0.0
 pc02_lo = 0.0
 pc02_up = 0.0
-
 if ((pc01_lo_str == "def") &
     (pc01_up_str == "def") &
     (pc02_lo_str == "def") &
@@ -127,43 +111,32 @@ if ((pc01_lo_str == "def") &
     pc01_up = pc01_mid + pc01_wid / 2.0
     pc02_lo = pc02_mid - pc02_wid / 2.0
     pc02_up = pc02_mid + pc02_wid / 2.0
-
-    print(pc01_lo, pc01_up, pc02_lo, pc02_up)
-
 else:
     pc01_lo = float(pc01_lo_str)
     pc01_up = float(pc01_up_str)
     pc02_lo = float(pc02_lo_str)
     pc02_up = float(pc02_up_str)
 
-    print(pc01_lo, pc01_up, pc02_lo, pc02_up)
+print(pc01_lo, pc01_up, pc02_lo, pc02_up)
 
 # gmm
-
-# 
-# 
-#                              
-#      init_params='kmeans',
-#                              means_init=[[-3.0, -1.0],
-#                                          [+0.0, +5.0],
-#                                          [+5.5, -1.0],
-#                                          [+6.5, -1.0],
-#                                          [-6.0, +4.0]],
-
 gmm = None
-if (use_prefit == 1):
-    prefit_pkl = os.environ["GMM_MARGIN_MODEL"]
-    gmm = pk.load(open(prefit_pkl, 'rb'))
-elif (use_prefit == 0):
+if (0 == use_prefit):
     gmm = mixture.GaussianMixture(n_components=2,
                                   random_state=1,
                                   covariance_type="full",
                                   verbose=5)
     gmm.fit(data_2darr)
-
+    out_pkl = indir + "/" + ("%s.pkl" % gmm_tag_str)
+    pk.dump(gmm, open(out_pkl,"wb"))
+elif (1 == use_prefit):
+    prefit_pkl = os.environ["MODEL_DIR"] + "/" + ("%s.pkl" % gmm_tag_str)
+    gmm = pk.load(open(prefit_pkl, 'rb'))
 else:
     print("bad use_prefit = ", use_prefit)
     exit()
+
+
 
 cluster_gmm = gmm.predict(data_2darr)
 cluster_prob = gmm.predict_proba(data_2darr)
@@ -177,7 +150,6 @@ data_gmm_df = pd.concat([data_left_df,
                         axis=1)
 
 print(data_gmm_df[['pc01', 'pc02', "cluster_gmm"]])
-
 
 data_gmm_cl0_df = data_gmm_df[data_gmm_df["cluster_gmm"]==0]
 plt.scatter(data_gmm_cl0_df['pc01'],
@@ -196,7 +168,7 @@ plt.ylim(pc02_lo, pc02_up)
 plt.grid(True, linestyle='--')
 
 outdir = indir
-outfile_full = outdir + "/" + "gmm_margin_2d_2cl.png"
+outfile_full = outdir + "/" + ("%s.png" % gmm_tag_str)
 print("outfile = ", outfile_full)
 
 plt.savefig(outfile_full,
@@ -272,13 +244,15 @@ if (1 == flag_cat):
 
 elif (0 == flag_cat):
     outdir = indir
-    outcsv = outdir + "/" + "akari_stat_fit_star_pca_margin_gmm_2d_2cl.csv"
+    outcsv = outdir + "/" + (
+        "akari_stat_fit_star_%s_gmm.csv" % pca_tag_str)
     print(f"outcsv = {outcsv}")
     data_gmm_df.to_csv(outcsv, index=False)
 
     outdir = indir
-    outcsv = (outdir + "/"
-              + "akari_stat_fit_star_pca_margin_gmm_2d_2cl_simple.csv")
+    outcsv = (
+        outdir + "/"
+        + ("akari_stat_fit_star_%s_gmm_simple.csv" % pca_tag_str ))
     print(f"outcsv = {outcsv}")
     data_gmm_df[["file", "cluster_gmm",
                  "cluster_prob_01", "cluster_prob_02"]].to_csv(
@@ -289,13 +263,13 @@ else:
     exit()
 
 
-if (use_prefit == 1):
-    pass
-elif (use_prefit == 0):
-    out_pkl = indir + "/" + "gmm_margin.pkl"
-    pk.dump(gmm, open(out_pkl,"wb"))
-else:
-    print("bad use_prefit = ", use_prefit)
-    exit()
 
-
+######################################################    
+#  memo
+#                              
+#      init_params='kmeans',
+#                              means_init=[[-3.0, -1.0],
+#                                          [+0.0, +5.0],
+#                                          [+5.5, -1.0],
+#                                          [+6.5, -1.0],
+#                                          [-6.0, +4.0]],

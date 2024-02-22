@@ -1,15 +1,19 @@
 #!/bin/sh
 
-branch=develop
+branch_name=develop
+data_name=stm13r_1
+model_name=st20070102A2
 
-export PYTHONPATH=/home/morii/work/github/moriiism/akari
 export AKARI_TOOL_DIR=/home/morii/work/github/moriiism/akari
-export AKARI_ANA_DIR=/home/morii/work/akari/ana/${branch}/stm13r_1
+export PYTHONPATH=$AKARI_TOOL_DIR
+export AKARI_ANA_DIR=/home/morii/work/akari/ana/${branch_name}/${data_name}
+export MODEL_DIR=/home/morii/work/akari/ana/${branch_name}/${model_name}
 
-echo "PYTHONPATH="$PYTHONPATH
 echo "AKARI_TOOL_DIR="$AKARI_TOOL_DIR
+echo "PYTHONPATH="$PYTHONPATH
 echo "AKARI_ANA_DIR="$AKARI_ANA_DIR
+echo "MODEL_DIR="$MODEL_DIR
 
-termtitle="stm13r_1"
+termtitle="BRANCH=${branch_name}, DATA=${data_name}, MODEL=${model_name}"
 PROMPT_COMMAND='echo -ne "\033]0;${termtitle}\007"'
 echo "setup done."

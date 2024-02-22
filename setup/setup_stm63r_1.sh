@@ -1,8 +1,10 @@
 #!/bin/sh
 
+branch=develop
+
 export PYTHONPATH=/home/morii/work/github/moriiism/akari
 export AKARI_TOOL_DIR=/home/morii/work/github/moriiism/akari
-export AKARI_ANA_DIR=/home/morii/work/akari/ana/stm63r_1
+export AKARI_ANA_DIR=/home/morii/work/akari/ana/${branch}/stm63r_1
 
 echo "PYTHONPATH="$PYTHONPATH
 echo "AKARI_TOOL_DIR="$AKARI_TOOL_DIR

@@ -1,2 +1,15 @@
+#
+# install.txt
+#
+
+# install at std-terminal
+
+% conda install astropy
+% conda install scikit-learn
+% conda install matplotlib
+
+# install at arb01
 
 pip install <package> --user
+
+

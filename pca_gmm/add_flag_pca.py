@@ -68,6 +68,10 @@ else:
     print('Arguments are not 7.')
     exit()
     
+# tag
+pca_tag_str = ("pca_cat%d_ftr%d_prefit%d" %
+               (flag_cat, pca_feature, use_prefit))
+
 indir = os.environ["AKARI_ANA_DIR"]
 incsv = ""
 if (0 == flag_cat):
@@ -78,6 +82,12 @@ else:
     print("bad flag_cat = ", flag_cat)
     exit()
 
+# for output
+outdir = indir + "/" + pca_tag_str
+if (False == os.path.exists(outdir)):
+    os.makedirs(outdir)
+
+# read input
 data_df = pd.read_csv(incsv)
 print(data_df)
 
@@ -168,16 +178,22 @@ data_selcol_sc_ndarr = sc.fit_transform(
     data_selcol_df)
 
 # pca
-pca_tag_str = "pca_%d" % pca_feature
-
 pca = None
 if (use_prefit == 0):
     pca = PCA(n_components=ncomp_pca)
     pca.fit(data_selrow_selcol_sc_ndarr)
-    out_pkl = indir + "/" + ("%s.pkl" % pca_tag_str)
+    out_pkl = outdir + "/" + "pca.pkl"
     pk.dump(pca, open(out_pkl,"wb"))
 elif (use_prefit == 1):
-    prefit_pkl = os.environ["MODEL_DIR"] + "/" + ("%s.pkl" % pca_tag_str)
+    flag_cat_for_making_model = 1
+    use_prefit_for_making_model = 0
+    pca_prefit_tag_str = ("pca_cat%d_ftr%d_prefit%d" %
+                          (flag_cat_for_making_model,
+                           pca_feature,
+                           use_prefit_for_making_model))
+    prefit_pkl = (os.environ["MODEL_DIR"] + "/"
+                  + pca_prefit_tag_str + "/"
+                  + "pca.pkl")
     pca = pk.load(open(prefit_pkl,'rb'))
 else:
     print("bad use_prefit = ", use_prefit)
@@ -196,12 +212,11 @@ data_pca_df = pd.concat([data_df,
                         axis = 1)
 
 # output
-outdir = indir
 outcsv = ""
 if (0 == flag_cat):
-    outcsv = outdir + "/" + ("akari_stat_fit_star_%s.csv" % pca_tag_str)
+    outcsv = outdir + "/" + "akari_stat_fit_star_pca.csv"
 elif (1 == flag_cat):
-    outcsv = outdir + "/" + ("akari_stat_fit_star_cat_%s.csv" % pca_tag_str)
+    outcsv = outdir + "/" + "akari_stat_fit_star_cat_pca.csv"
 else:
     print("bad flag_cat = ", flag_cat)
     exit()
@@ -257,7 +272,7 @@ plt.scatter(data_pca_selrow_df['pc01'],
             data_pca_selrow_df['pc02'], s=1, c="r")
 plt.title("PC (Blue: all, Red: selected for making PCA model)")
 
-outfile_full = outdir + "/" + ("%s.png" % pca_tag_str)
+outfile_full = outdir + "/" + "pca.png"
 print("outfile = ", outfile_full)
 plt.savefig(outfile_full,
             bbox_inches='tight',
@@ -278,7 +293,7 @@ plt.xlabel("Number of principal components")
 plt.ylabel("Cumulative contribution rate")
 plt.grid(True, linestyle='--')
 
-outfile_full = outdir + "/" + ("%s_contrib.png" % pca_tag_str)
+outfile_full = outdir + "/" + "pca_contrib.png"
 print("outfile = ", outfile_full)
 plt.savefig(outfile_full,
             bbox_inches='tight',
@@ -310,14 +325,14 @@ pc01_name_sort_by_pc0_2darr = pc01_name_2darr[
     np.argsort(pc01_name_2darr[:,0])]
 pc01_name_sort_by_pc1_2darr = pc01_name_2darr[
     np.argsort(pc01_name_2darr[:,1])]
-outfile_full = outdir + "/" + ("%s_comp_sort_by_pc0.txt" % pca_tag_str)
+outfile_full = outdir + "/" + "pca_comp_sort_by_pc0.txt"
 np.savetxt(outfile_full, pc01_name_sort_by_pc0_2darr, 
            fmt=['%.5e', '%.5e', '%s'])
-outfile_full = outdir + "/" + ("%s_comp_sort_by_pc1.txt" % pca_tag_str)
+outfile_full = outdir + "/" + "pca_comp_sort_by_pc1.txt"
 np.savetxt(outfile_full, pc01_name_sort_by_pc1_2darr,
            fmt=['%.5e', '%.5e', '%s'])
 
-outfile_full = outdir + "/" + ("%s_comp.png" % pca_tag_str)
+outfile_full = outdir + "/" + "pca_comp.png"
 print("outfile = ", outfile_full)
 plt.savefig(outfile_full,
             bbox_inches='tight',

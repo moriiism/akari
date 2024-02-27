@@ -54,19 +54,28 @@ else:
     print('Arguments are not 7.')
     exit()
 
-pca_tag_str = "pca_%d" % pca_feature
-gmm_tag_str = "gmm_%d" % pca_feature
-    
+# tag
+pca_tag_str = ("pca_cat%d_ftr%d_prefit%d" %
+               (flag_cat, pca_feature, use_prefit))
+
 indir = os.environ["AKARI_ANA_DIR"]
 incsv = ""
 if (0 == flag_cat):
-    incsv = indir + "/" + ("akari_stat_fit_star_%s.csv" % pca_tag_str)
+    incsv = (indir + "/" + pca_tag_str + "/"
+             + "akari_stat_fit_star_pca.csv")
 elif (1 == flag_cat):
-    incsv = indir + "/" + ("akari_stat_fit_star_cat_%s.csv" % pca_tag_str)
+    incsv = (indir + "/" + pca_tag_str + "/"
+             + "akari_stat_fit_star_cat_pca.csv")
 else:
     print("bad flag_cat = ", flag_cat)
     exit()
 
+# for output
+outdir = indir + "/" + pca_tag_str
+if (False == os.path.exists(outdir)):
+    os.makedirs(outdir)
+
+# read input
 data_df = pd.read_csv(incsv)
 print(data_df)
 
@@ -127,17 +136,24 @@ if (0 == use_prefit):
                                   covariance_type="full",
                                   verbose=5)
     gmm.fit(data_2darr)
-    out_pkl = indir + "/" + ("%s.pkl" % gmm_tag_str)
+    out_pkl = outdir + "/" + "gmm.pkl"
     pk.dump(gmm, open(out_pkl,"wb"))
 elif (1 == use_prefit):
-    prefit_pkl = os.environ["MODEL_DIR"] + "/" + ("%s.pkl" % gmm_tag_str)
+    flag_cat_for_making_model = 1
+    use_prefit_for_making_model = 0
+    pca_prefit_tag_str = ("pca_cat%d_ftr%d_prefit%d" %
+                          (flag_cat_for_making_model,
+                           pca_feature,
+                           use_prefit_for_making_model))
+    prefit_pkl = (os.environ["MODEL_DIR"] + "/"
+                  + pca_prefit_tag_str + "/"
+                  + "gmm.pkl")
     gmm = pk.load(open(prefit_pkl, 'rb'))
 else:
     print("bad use_prefit = ", use_prefit)
     exit()
 
-
-
+# apply gmm
 cluster_gmm = gmm.predict(data_2darr)
 cluster_prob = gmm.predict_proba(data_2darr)
 
@@ -167,8 +183,9 @@ plt.xlim(pc01_lo, pc01_up)
 plt.ylim(pc02_lo, pc02_up)
 plt.grid(True, linestyle='--')
 
-outdir = indir
-outfile_full = outdir + "/" + ("%s.png" % gmm_tag_str)
+
+# plot
+outfile_full = outdir + "/" + "gmm.png"
 print("outfile = ", outfile_full)
 
 plt.savefig(outfile_full,
@@ -242,22 +259,24 @@ if (1 == flag_cat):
           + len(data_star1_gmm0_df) + len(data_star1_gmm1_df))
     print(len(data_gmm_df))
 
-elif (0 == flag_cat):
-    outdir = indir
-    outcsv = outdir + "/" + (
-        "akari_stat_fit_star_%s_gmm.csv" % pca_tag_str)
+    outcsv = outdir + "/" + "akari_stat_fit_star_cat_pca_gmm.csv"
     print(f"outcsv = {outcsv}")
     data_gmm_df.to_csv(outcsv, index=False)
-
-    outdir = indir
-    outcsv = (
-        outdir + "/"
-        + ("akari_stat_fit_star_%s_gmm_simple.csv" % pca_tag_str ))
+    outcsv = outdir + "/" + "akari_stat_fit_star_cat_pca_gmm_simple.csv"
     print(f"outcsv = {outcsv}")
     data_gmm_df[["file", "cluster_gmm",
                  "cluster_prob_01", "cluster_prob_02"]].to_csv(
                      outcsv, index=False)
-
+    
+elif (0 == flag_cat):
+    outcsv = outdir + "/" + "akari_stat_fit_star_pca_gmm.csv"
+    print(f"outcsv = {outcsv}")
+    data_gmm_df.to_csv(outcsv, index=False)
+    outcsv = outdir + "/" + "akari_stat_fit_star_pca_gmm_simple.csv"
+    print(f"outcsv = {outcsv}")
+    data_gmm_df[["file", "cluster_gmm",
+                 "cluster_prob_01", "cluster_prob_02"]].to_csv(
+                     outcsv, index=False)
 else:
     print("bad flag_cat = ", flag_cat)
     exit()

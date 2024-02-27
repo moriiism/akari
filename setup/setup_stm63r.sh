@@ -1,7 +1,7 @@
 #!/bin/sh
 
 branch_name=develop
-data_name=stm13r
+data_name=stm63r
 model_name=st20070102A2
 
 export AKARI_DATA_DIR=/home/morii/work/akari/data/${data_name}

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 branch_name=develop
-data_name=stm13r_1
+data_name=stm63r_2
 model_name=st20070102A2
 
 export AKARI_TOOL_DIR=/home/morii/work/github/moriiism/akari

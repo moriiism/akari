@@ -13,8 +13,9 @@ def calc_norm_in_row_of_dataframe(row_ser):
     row_norm_ser["sum"] = total
     return row_norm_ser
 
-def calc_stat_in_row_of_dataframe(row_ser):
-    # call by data_frame.apply(calc_stat_in_row_of_dataframe, axis=1)
+def calc_stat_for_normed_in_row_of_dataframe(row_ser):
+    # call by data_frame.apply(calc_stat_for_normed_in_row_of_dataframe,
+    #                          axis=1)
     row_sel_ser = row_ser.drop("sum")
     row_stat_ser = pd.Series([], dtype=float)
     row_stat_ser["norm_stddev"] = row_sel_ser.std()
@@ -25,9 +26,9 @@ def calc_stat_in_row_of_dataframe(row_ser):
     row_stat_ser["norm_gini"] = gini(row_sel_ser.values)
     return row_stat_ser
 
-def calc_feature_in_row_of_dataframe(row_ser):
+def calc_feature_for_normed_in_row_of_dataframe(row_ser):
     # call by data_frame.apply(
-    #   calc_feature_in_row_of_dataframe, axis=1)
+    #   calc_feature_for_normed_in_row_of_dataframe, axis=1)
     row_feature_ser = pd.Series([], dtype=float)
     peak = row_ser["x02y02_norm"]
     around = (row_ser["x01y01_norm"]
@@ -40,22 +41,55 @@ def calc_feature_in_row_of_dataframe(row_ser):
               + row_ser["x03y03_norm"]) / 8.0
     ratio_around_to_peak = around / peak
     row_feature_ser["ratio_around_to_peak"] = ratio_around_to_peak
-    ave_margin = (row_ser["x00y00_norm"]
-                  + row_ser["x00y01_norm"]
-                  + row_ser["x00y02_norm"]
-                  + row_ser["x00y03_norm"]
-                  + row_ser["x00y04_norm"]
-                  + row_ser["x01y00_norm"]
-                  + row_ser["x01y04_norm"]
-                  + row_ser["x02y00_norm"]
-                  + row_ser["x02y04_norm"]
-                  + row_ser["x03y00_norm"]
-                  + row_ser["x03y04_norm"]
-                  + row_ser["x04y00_norm"]
-                  + row_ser["x04y01_norm"]
-                  + row_ser["x04y02_norm"]
-                  + row_ser["x04y03_norm"]
-                  + row_ser["x04y04_norm"]) / 16.0
+    norm_ave_margin = (row_ser["x00y00_norm"]
+                       + row_ser["x00y01_norm"]
+                       + row_ser["x00y02_norm"]
+                       + row_ser["x00y03_norm"]
+                       + row_ser["x00y04_norm"]
+                       + row_ser["x01y00_norm"]
+                       + row_ser["x01y04_norm"]
+                       + row_ser["x02y00_norm"]
+                       + row_ser["x02y04_norm"]
+                       + row_ser["x03y00_norm"]
+                       + row_ser["x03y04_norm"]
+                       + row_ser["x04y00_norm"]
+                       + row_ser["x04y01_norm"]
+                       + row_ser["x04y02_norm"]
+                       + row_ser["x04y03_norm"]
+                       + row_ser["x04y04_norm"]) / 16.0
+    row_feature_ser["norm_ave_margin"] = norm_ave_margin
+    return row_feature_ser
+
+
+def calc_feature_for_asis_in_row_of_dataframe(row_ser):
+    # call by data_frame.apply(
+    #   calc_feature_for_asis_in_row_of_dataframe, axis=1)
+    row_feature_ser = pd.Series([], dtype=float)
+    ave_around = (row_ser["x01y01"]
+                  + row_ser["x01y02"]
+                  + row_ser["x01y03"]
+                  + row_ser["x02y01"]
+                  + row_ser["x02y03"]
+                  + row_ser["x03y01"]
+                  + row_ser["x03y02"]
+                  + row_ser["x03y03"]) / 8.0
+    row_feature_ser["ave_around"] = ave_around
+    ave_margin = (row_ser["x00y00"]
+                  + row_ser["x00y01"]
+                  + row_ser["x00y02"]
+                  + row_ser["x00y03"]
+                  + row_ser["x00y04"]
+                  + row_ser["x01y00"]
+                  + row_ser["x01y04"]
+                  + row_ser["x02y00"]
+                  + row_ser["x02y04"]
+                  + row_ser["x03y00"]
+                  + row_ser["x03y04"]
+                  + row_ser["x04y00"]
+                  + row_ser["x04y01"]
+                  + row_ser["x04y02"]
+                  + row_ser["x04y03"]
+                  + row_ser["x04y04"]) / 16.0
     row_feature_ser["ave_margin"] = ave_margin
     return row_feature_ser
 
@@ -77,6 +111,4 @@ def calc_angular_separation_in_row_of_dataframe(
         return 1
     else:
         return 0
-
-
 

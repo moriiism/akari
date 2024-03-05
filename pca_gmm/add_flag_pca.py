@@ -134,7 +134,7 @@ elif (1 == pca_feature):
                                    "gfit_norm",
                                    "gfit_const",
                                    "gfit_valid",
-                                   "ave_margin"])
+                                   "norm_ave_margin"])
 elif (2 == pca_feature):
     colname_lst = (
         colname_pixarr_norm_lst + ["sum",
@@ -155,6 +155,25 @@ elif (3 == pca_feature):
                                    "norm_kurt",
                                    "norm_gini",
                                    "ratio_around_to_peak",
+                                   "norm_ave_margin"])
+elif (4 == pca_feature):
+    colname_lst = (
+        colname_pixarr_norm_lst + ["sum",
+                                   "norm_stddev",
+                                   "norm_min",
+                                   "norm_max",
+                                   "norm_skew",
+                                   "norm_kurt",
+                                   "norm_gini",
+                                   "ratio_around_to_peak",
+                                   "gfit_mu_x",
+                                   "gfit_mu_y",
+                                   "gfit_sigma_x",
+                                   "gfit_sigma_y",
+                                   "gfit_theta",
+                                   "gfit_norm",
+                                   "gfit_const",
+                                   "gfit_valid",
                                    "ave_margin"])
 else:
     print("bad pca_feature %d" % pca_feature)

@@ -4,15 +4,10 @@
 # convert fits file data to csv file
 #
 
-# Preparation:
-#   % conda install astropy
-#   % conda install scikit-learn
-#   % conda install matplotlib
-#
 # Setup:
 #   % source $akari_tool_dir/setup/setup.sh
 # Run:
-#   % python $akari_tool/preproc/fits_to_csv.py
+#   % python $akari_tool_dir/preproc/fits_to_csv.py
 #
 
 import os
@@ -33,6 +28,7 @@ if (1 == nargs):
 else:
     print('usage: python fits_to_csv.py 1/0')
     print('usage: argument means that fits files contain crval(1) or not(0).')
+    print('usage: CRVAL: coordinate info')
     print('Arguments are not 1.')
     exit()
 

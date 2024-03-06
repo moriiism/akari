@@ -1,3 +1,16 @@
+#
+# install.txt
+#
+
+### install at std-terminal
+
+% conda install astropy
+% conda install scikit-learn
+% conda install matplotlib
+
+
+### install at arb01
+
 # install module for local user directory
 # pip install <package> --user
 
@@ -6,3 +19,4 @@ pip install pandas --user
 pip install matplotlib --user
 pip install scipy --user
 pip install scikit-learn --user
+

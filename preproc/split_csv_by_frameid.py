@@ -20,11 +20,6 @@
 import os
 import sys
 import pandas as pd
-from akarilib import get_colname_lst_of_pixarr
-from akarilib import calc_norm_in_row_of_dataframe
-from akarilib import calc_stat_in_row_of_dataframe
-from akarilib import calc_feature_in_row_of_dataframe
-import matplotlib.pyplot as plt
 
 indir = os.environ["AKARI_ANA_DIR"]
 incsv = indir + "/" + "akari.csv"

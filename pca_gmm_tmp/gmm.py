@@ -62,10 +62,10 @@ indir = os.environ["AKARI_ANA_DIR"]
 incsv = ""
 if (0 == flag_cat):
     incsv = (indir + "/" + pca_tag_str + "/"
-             + "akari_stat_fit_star_pca.csv")
+             + "akari_stat_fit_star_pca_dist.csv")
 elif (1 == flag_cat):
     incsv = (indir + "/" + pca_tag_str + "/"
-             + "akari_stat_fit_star_cat_pca.csv")
+             + "akari_stat_fit_star_cat_pca_dist.csv")
 else:
     print("bad flag_cat = ", flag_cat)
     exit()
@@ -191,18 +191,19 @@ plt.savefig(outfile_full,
             bbox_inches='tight',
             pad_inches=0.1)
 
-# plot of all data and cat(or star_pos>1)
-
-data_gmm_spike_df = data_gmm_df[data_gmm_df["star_pos"]<=1]
+# plot of all data and (star_pos>1)
+data_gmm_spike_df = data_gmm_df[
+    data_gmm_df["star_pos"]<=1]
 plt.scatter(data_gmm_spike_df['pc01'],
             data_gmm_spike_df['pc02'],
             s=1, c="b")
 data_gmm_star_df = data_gmm_df[data_gmm_df["star_pos"]>1]
+
 plt.scatter(data_gmm_star_df['pc01'],
             data_gmm_star_df['pc02'],
             s=1, c="r")
 
-plt.title("star: star_pos>1, spike: star_pos<=1")
+plt.title("Red: star: star_pos>1, Blue: spike: star_pos<=1")
 plt.xlabel("pc01")
 plt.ylabel("pc02")
 plt.xlim(pc01_lo, pc01_up)
@@ -216,6 +217,52 @@ print("outfile = ", outfile_full)
 plt.savefig(outfile_full,
             bbox_inches='tight',
             pad_inches=0.1)
+
+
+# plot of all data and (star_pos>1)
+data_gmm_spike_df = data_gmm_df[
+    data_gmm_df["star_pos"]<=1]
+plt.scatter(data_gmm_spike_df['pc01'],
+            data_gmm_spike_df['pc02'],
+            s=1, c="b")
+data_gmm_star_df = data_gmm_df[
+    (data_gmm_df["star_pos"]>1) &
+    (data_gmm_df["dist_lr_pca"]<25.0) &
+    (data_gmm_df["dist_lr_pca"]>=0.0)]
+
+plt.scatter(data_gmm_star_df['pc01'],
+            data_gmm_star_df['pc02'],
+            s=1, c="r")
+
+plt.title("Red: star: star_pos>1, Blue: spike: star_pos<=1")
+plt.xlabel("pc01")
+plt.ylabel("pc02")
+plt.xlim(pc01_lo, pc01_up)
+plt.ylim(pc02_lo, pc02_up)
+plt.grid(True, linestyle='--')
+
+# plot
+outfile_full = outdir + "/" + "gmm_star_pos_v2.png"
+print("outfile = ", outfile_full)
+
+plt.savefig(outfile_full,
+            bbox_inches='tight',
+            pad_inches=0.1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if (1 == flag_cat):
     # plot of all data and cat

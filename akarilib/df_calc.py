@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from akarilib import gini
 from astropy import units
 from astropy.coordinates import angular_separation, Angle
@@ -112,3 +113,55 @@ def calc_angular_separation_in_row_of_dataframe(
     else:
         return 0
 
+
+def calc_dist_lr_for_pca_in_row_of_dataframe(row_ser,
+                                             right_df):
+    # call by data_frame.apply(
+    #    calc_dist_lr_for_pca_in_row_of_dataframe(right_df), axis=1)
+
+    left_1darr = row_ser.filter(regex="sum").values
+    row_dist_ser = pd.Series([], dtype=float)
+    row_dist_ser["dist_lr_pca"] = -1.0
+    if (row_ser["nfind"]==0):
+        row_dist_ser["dist_lr_pca"] = -1.0
+    elif (row_ser["nfind"]>0):
+        right_match_df = None
+        right_match_df = right_df[right_df["file"]==row_ser["file_find"]]
+        if (len(right_match_df) == 0):
+            row_dist_ser["dist_lr_pca"] = -1.0
+        else:
+            right_1darr = right_match_df.iloc[0,:].filter(regex="sum").values
+            row_dist_ser["dist_lr_pca"] = np.linalg.norm(
+                left_1darr - right_1darr)
+        del right_match_df
+
+    return (row_dist_ser)
+
+
+#def calc_dist_lr_for_pca_in_row_of_dataframe(row_ser,
+#                                             right_df):
+#    # call by data_frame.apply(
+#    #    calc_dist_lr_for_pca_in_row_of_dataframe(right_df), axis=1)
+#
+#    left_1darr = row_ser.filter(regex="^pc").values
+#    row_dist_ser = pd.Series([], dtype=float)
+#    row_dist_ser["dist_lr_pca"] = -1.0
+#    if (row_ser["nfind"]==0):
+#        row_dist_ser["dist_lr_pca"] = -1.0
+#    elif (row_ser["nfind"]>0):
+#        right_match_df = None
+#        right_match_df = right_df[right_df["file"]==row_ser["file_find"]]
+#        if (len(right_match_df) == 0):
+#            row_dist_ser["dist_lr_pca"] = -1.0
+#        else:
+#            right_1darr = right_match_df.iloc[0,:].filter(regex="^pc").values
+#            row_dist_ser["dist_lr_pca"] = np.linalg.norm(
+#                left_1darr - right_1darr)
+#        del right_match_df
+#
+#    return (row_dist_ser)
+
+
+
+
+    

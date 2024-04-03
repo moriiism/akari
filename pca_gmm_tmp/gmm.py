@@ -191,6 +191,9 @@ plt.savefig(outfile_full,
             bbox_inches='tight',
             pad_inches=0.1)
 
+plt.cla()
+plt.clf()
+
 # plot of all data and (star_pos>1)
 data_gmm_spike_df = data_gmm_df[
     data_gmm_df["star_pos"]<=1]
@@ -218,6 +221,9 @@ plt.savefig(outfile_full,
             bbox_inches='tight',
             pad_inches=0.1)
 
+plt.cla()
+plt.clf()
+
 
 # plot of all data and (star_pos>1)
 data_gmm_spike_df = data_gmm_df[
@@ -227,7 +233,7 @@ plt.scatter(data_gmm_spike_df['pc01'],
             s=1, c="b")
 data_gmm_star_df = data_gmm_df[
     (data_gmm_df["star_pos"]>1) &
-    (data_gmm_df["dist_lr_pca"]<25.0) &
+    (data_gmm_df["dist_lr_pca"]<1.0) &
     (data_gmm_df["dist_lr_pca"]>=0.0)]
 
 plt.scatter(data_gmm_star_df['pc01'],
@@ -248,6 +254,9 @@ print("outfile = ", outfile_full)
 plt.savefig(outfile_full,
             bbox_inches='tight',
             pad_inches=0.1)
+
+plt.cla()
+plt.clf()
 
 
 

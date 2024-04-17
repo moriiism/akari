@@ -254,6 +254,12 @@ if (1 == flag_cat):
     data_gmm_df[["file", "cluster_gmm",
                  "cluster_prob_01", "cluster_prob_02"]].to_csv(
                      outcsv, index=False)
+
+    # data_star1_gmm0_df: event of false_negative
+    outcsv = outdir + "/" + "akari_stat_fit_star_cat_pca_gmm_star1_gmm0.csv"
+    print(f"outcsv = {outcsv}")
+    data_star1_gmm0_df.to_csv(outcsv, index=False)
+    
 else:
     print("bad flag_cat = ", flag_cat)
     exit()

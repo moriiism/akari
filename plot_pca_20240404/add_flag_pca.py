@@ -79,11 +79,11 @@ if (False == os.path.exists(outdir)):
 data_df = pd.read_csv(incsv)
 print(data_df)
 
+# pca calc before selection of left-right match: "star_pos" > 1
+
 data_selrow_df = data_df[(data_df["left"] == 1) & 
                          (data_df["dark"] == 0) &
                          (data_df["edge"] == 0)]
-
-# (data_df["star_pos"] > 1)]
 
 colname_pixarr_norm_lst = get_colname_lst_of_pixarr_norm()
 colname_lst = None

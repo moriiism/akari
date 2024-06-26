@@ -4,11 +4,17 @@ branch_name=develop
 data_name=stm43r3
 model_name=st20070102A2
 
-export AKARI_DATA_DIR=/home/morii/work/akari/data/${data_name}
-export AKARI_TOOL_DIR=/home/morii/work/github/moriiism/akari
+#export AKARI_DATA_DIR=/home/morii/work/akari/data/${data_name}
+#export AKARI_TOOL_DIR=/home/morii/work/github/moriiism/akari
+export AKARI_DATA_DIR=/mnt/volume/akari/data/${data_name}
+export AKARI_TOOL_DIR=/home/morii/github/akari
+
 export PYTHONPATH=$AKARI_TOOL_DIR
-export AKARI_ANA_DIR=/home/morii/work/akari/ana/${branch_name}/${data_name}
-export MODEL_DIR=/home/morii/work/akari/ana/${branch_name}/${model_name}
+
+#export AKARI_ANA_DIR=/home/morii/work/akari/ana/${branch_name}/${data_name}
+#export MODEL_DIR=/home/morii/work/akari/ana/${branch_name}/${model_name}
+export AKARI_ANA_DIR=/mnt/volume/akari/ana/${branch_name}/${data_name}
+export MODEL_DIR=/mnt/volume/akari/ana/${branch_name}/${model_name}
 
 echo "AKARI_DATA_DIR="$AKARI_DATA_DIR
 echo "AKARI_TOOL_DIR="$AKARI_TOOL_DIR

@@ -16,7 +16,7 @@ from sklearn.decomposition import PCA
 from sklearn import mixture
 import pickle as pk
 
-# python3 gmm_after_lrm.py 1 0 0 def def def def
+# python3 gmm_after_lrm.py 1 0 0 def def def def rand
 
 flag_cat = 0
 pca_feature = 0
@@ -24,7 +24,7 @@ use_prefit = 0
 args = sys.argv
 nargs = len(args) - 1
 print(nargs)
-if (7 == nargs):
+if (8 == nargs):
     flag_cat = int(args[1])
     pca_feature = int(args[2])
     use_prefit = int(args[3])
@@ -32,6 +32,7 @@ if (7 == nargs):
     pc01_up_str = args[5]
     pc02_lo_str = args[6]
     pc02_up_str = args[7]
+    random_state = args[8]
     print("flag_cat = ", flag_cat)
     print("pca_feature = ", pca_feature)
     print("use_prefit = ", use_prefit)
@@ -39,9 +40,10 @@ if (7 == nargs):
     print("pc01_up_str = ", pc01_up_str)
     print("pc02_lo_str = ", pc02_lo_str)
     print("pc02_up_str = ", pc02_up_str)
+    print("random_state = ", random_state)
 else:
     print('usage: python3 gmm_after_lrm.py flag_cat pca_feature use_prefit ' +
-          'pc01_lo pc01_up pc02_lo pc02_up')
+          'pc01_lo pc01_up pc02_lo pc02_up random_state')
     print('usage: flag_cat means that csv files contain ' +
           'catalog(1) or not(0).')
     print('usage: pca_feature means type of features for pca calculation.')    
@@ -49,7 +51,7 @@ else:
     print('usage: arg4, 5, 6, 7 means ' +
           'pc01_lo pc01_up pc02_lo pc02_up.' +
           'Set 4 values or def def def def.')
-    print('Arguments are not 7.')
+    print('Arguments are not 8.')
     exit()
 
 # tag
@@ -130,7 +132,7 @@ print(pc01_lo, pc01_up, pc02_lo, pc02_up)
 gmm = None
 if (0 == use_prefit):
     gmm = mixture.GaussianMixture(n_components=2,
-                                  random_state=1,
+                                  random_state=random_state,
                                   covariance_type="full",
                                   verbose=5)
     gmm.fit(data_2darr)

@@ -65,6 +65,58 @@ def output_graphs(clf, X_test, y_test, feature_lst, outdir):
     plt.savefig(outfile_full,
                 bbox_inches='tight',  pad_inches=0.1)
 
+    # calc confusion matrix
+    # y_test, y_pred
+    test_pred_df = pd.DataFrame({"test": y_test,
+                                 "pred": y_pred})
+    test0_pred0_df = test_pred_df[(test_pred_df["test"]==0) &
+                                  (test_pred_df["pred"]==0)]
+    test0_pred1_df = test_pred_df[(test_pred_df["test"]==0) &
+                                  (test_pred_df["pred"]==1)]
+    test1_pred0_df = test_pred_df[(test_pred_df["test"]==1) &
+                                  (test_pred_df["pred"]==0)]
+    test1_pred1_df = test_pred_df[(test_pred_df["test"]==1) &
+                                  (test_pred_df["pred"]==1)]
+    
+    test0_df = test_pred_df[(test_pred_df["test"]==0)]
+    test1_df = test_pred_df[(test_pred_df["test"]==1)]
+    pred0_df = test_pred_df[(test_pred_df["pred"]==0)]
+    pred1_df = test_pred_df[(test_pred_df["pred"]==1)]
+    
+    nevt_true_negative = len(test0_pred0_df)
+    nevt_false_positive = len(test0_pred1_df)
+    nevt_false_negative = len(test1_pred0_df)
+    nevt_true_positive = len(test1_pred1_df)
+    nevt_test0 = len(test0_df)
+    nevt_test1 = len(test1_df)
+    nevt_pred0 = len(pred0_df)
+    nevt_pred1 = len(pred1_df)
+    nevt_all = nevt_test0 + nevt_test1
+
+    print("test0, pred0 (true negative)  = ", nevt_true_negative)
+    print("test0, pred1 (false positive) = ", nevt_false_positive)
+    print("test1, pred0 (false negative) = ", nevt_false_negative)
+    print("test1, pred1 (true positive)  = ", nevt_true_positive)
+
+    true_negative_rate = nevt_true_negative / nevt_test0
+    false_positive_rate = nevt_false_positive / nevt_test0
+    false_negative_rate = nevt_false_negative / nevt_test1
+    true_positive_rate = nevt_true_positive / nevt_test1
+
+    print("true_negative_rate = ", true_negative_rate)
+    print("false_positive_rate = ", false_positive_rate)
+    print("false_negative_rate = ", false_negative_rate)
+    print("true_positive_rate = ", true_positive_rate)
+
+    print("confusion matrix:")
+    print("               spike    star    total")
+    print(f"pred_spike: {nevt_true_negative} {nevt_false_negative} {nevt_pred0} ")
+    print(f"pred_star:  {nevt_false_positive} {nevt_true_positive} {nevt_pred1} ")
+    print(f"total:     {nevt_test0} {nevt_test1}  {nevt_all}")
+    
+
+    
+
 
 #### main
 

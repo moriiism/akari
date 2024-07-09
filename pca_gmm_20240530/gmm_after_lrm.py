@@ -15,6 +15,7 @@ from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
 from sklearn import mixture
 import pickle as pk
+from scipy import integrate
 
 # python3 gmm_after_lrm.py 1 0 0 def def def def rand
 
@@ -32,7 +33,7 @@ if (8 == nargs):
     pc01_up_str = args[5]
     pc02_lo_str = args[6]
     pc02_up_str = args[7]
-    random_state = args[8]
+    random_state = int(args[8])
     print("flag_cat = ", flag_cat)
     print("pca_feature = ", pca_feature)
     print("use_prefit = ", use_prefit)
@@ -181,6 +182,9 @@ plt.savefig(outfile_full,
             bbox_inches='tight',
             pad_inches=0.1)
 
+plt.cla()
+plt.clf()
+
 
 data_gmm0_df = data_gmm_df[(data_gmm_df["cluster_gmm"] == 0)]
 data_gmm1_df = data_gmm_df[(data_gmm_df["cluster_gmm"] == 1)]
@@ -266,5 +270,105 @@ else:
     print("bad flag_cat = ", flag_cat)
     exit()
 
+
+
+#######  calc AUC
+print("calc AUC...")
+if (0 == flag_cat):
+    print("bad flag_cat = ", flag_cat)
+    exit()
+
+
+false_positive_rate_list = []
+true_positive_rate_list = []
+false_positive_rate_list.append(1.0)
+true_positive_rate_list.append(1.0)
+    
+for prob in np.arange(0.0, 1.0, 0.01):
+    data_gmm0_df = data_gmm_df[(data_gmm_df["cluster_prob_02"] < prob)]
+    data_gmm1_df = data_gmm_df[(data_gmm_df["cluster_prob_02"] >= prob)]
+    nevt_gmm0 = len(data_gmm0_df)
+    nevt_gmm1 = len(data_gmm1_df)
+    nevt_all = len(data_gmm_df)
+    #print("nevt_gmm0 = ", nevt_gmm0)
+    #print("nevt_gmm1 = ", nevt_gmm1)
+    #print("nevt_all = ", nevt_all)
+
+    data_star0_gmm0_df = None
+    data_star0_gmm1_df = None
+    data_star1_gmm0_df = None
+    data_star1_gmm1_df = None
+    data_star0_df = None
+    data_star1_df = None
+    nevt_true_negative = 0
+    nevt_false_positive = 0
+    nevt_false_negative = 0
+    nevt_true_positive = 0
+    nevt_star0 = 0
+    nevt_star1 = 0
+
+    data_star0_gmm0_df = data_gmm_df[(data_gmm_df["nstar_cat8"] == 0) &
+                                     (data_gmm_df["cluster_prob_02"] < prob)]
+    data_star0_gmm1_df = data_gmm_df[(data_gmm_df["nstar_cat8"]==0) &
+                                     (data_gmm_df["cluster_prob_02"] >= prob)]
+    data_star1_gmm0_df = data_gmm_df[(data_gmm_df["nstar_cat8"] > 0) &
+                                     (data_gmm_df["cluster_prob_02"] < prob)]
+    data_star1_gmm1_df = data_gmm_df[(data_gmm_df["nstar_cat8"] > 0) &
+                                     (data_gmm_df["cluster_prob_02"] >= prob)]
+    data_star0_df = data_gmm_df[(data_gmm_df["nstar_cat8"] == 0)]
+    data_star1_df = data_gmm_df[(data_gmm_df["nstar_cat8"] > 0)]
+    nevt_true_negative = len(data_star0_gmm0_df)
+    nevt_false_positive = len(data_star0_gmm1_df)
+    nevt_false_negative = len(data_star1_gmm0_df)
+    nevt_true_positive = len(data_star1_gmm1_df)
+    nevt_star0 = len(data_star0_df)
+    nevt_star1 = len(data_star1_df)
+
+
+    #print("star0, gmm0 (true negative)  = ", nevt_true_negative)
+    #print("star0, gmm1 (false positive) = ", nevt_false_positive)
+    #print("star1, gmm0 (false negative) = ", nevt_false_negative)
+    #print("star1, gmm1 (true positive)  = ", nevt_true_positive)
+
+    true_negative_rate = nevt_true_negative / nevt_star0
+    false_positive_rate = nevt_false_positive / nevt_star0
+    false_negative_rate = nevt_false_negative / nevt_star1
+    true_positive_rate = nevt_true_positive / nevt_star1
+
+    #print("true_negative_rate = ", true_negative_rate)
+    #print("false_positive_rate = ", false_positive_rate)
+    #print("false_negative_rate = ", false_negative_rate)
+    #print("true_positive_rate = ", true_positive_rate)
+
+    print(false_positive_rate, true_positive_rate)
+    false_positive_rate_list.append(false_positive_rate)
+    true_positive_rate_list.append(true_positive_rate)
+
+
+
+false_positive_rate_list.append(0.0)
+true_positive_rate_list.append(0.0)
+#print(false_positive_rate_list, true_positive_rate_list)
+
+auc = integrate.trapz(true_positive_rate_list[::-1], false_positive_rate_list[::-1]) 
+print(auc)
+
+plt.plot(false_positive_rate_list, true_positive_rate_list)
+plt.title(f"ROC curve, PCA + GMM (AUC = {auc:.3f})")
+plt.xlabel("FPR")
+plt.ylabel("TPR")
+plt.xlim(0.0, 1.0)
+plt.ylim(0.0, 1.0)
+plt.grid(True, linestyle='--')
+
+# plot
+outfile_full = outdir + "/" + "roc.png"
+print("outfile = ", outfile_full)
+
+plt.savefig(outfile_full,
+            bbox_inches='tight',
+            pad_inches=0.1)
+plt.cla()
+plt.clf()
 
 

@@ -18,7 +18,7 @@ import pickle as pk
 from scipy import integrate
 
 # python3 gmm_after_lrm.py 1 0 0 def def def def rand
-# python3 gmm_after_lrm.py 1 0 0 -10 20 -10 10 0
+# python3 gmm_after_lrm.py 1 0 0 -10 20 -10 10 0  2
 
 flag_cat = 0
 pca_feature = 0
@@ -26,7 +26,7 @@ use_prefit = 0
 args = sys.argv
 nargs = len(args) - 1
 print(nargs)
-if (8 == nargs):
+if (9 == nargs):
     flag_cat = int(args[1])
     pca_feature = int(args[2])
     use_prefit = int(args[3])
@@ -35,6 +35,7 @@ if (8 == nargs):
     pc02_lo_str = args[6]
     pc02_up_str = args[7]
     random_state = int(args[8])
+    n_comp_pca = int(args[9])
     print("flag_cat = ", flag_cat)
     print("pca_feature = ", pca_feature)
     print("use_prefit = ", use_prefit)
@@ -43,9 +44,10 @@ if (8 == nargs):
     print("pc02_lo_str = ", pc02_lo_str)
     print("pc02_up_str = ", pc02_up_str)
     print("random_state = ", random_state)
+    print("n_comp_pca = ", n_comp_pca)
 else:
     print('usage: python3 gmm_after_lrm.py flag_cat pca_feature use_prefit ' +
-          'pc01_lo pc01_up pc02_lo pc02_up random_state')
+          'pc01_lo pc01_up pc02_lo pc02_up random_state n_comp_pca')
     print('usage: flag_cat means that csv files contain ' +
           'catalog(1) or not(0).')
     print('usage: pca_feature means type of features for pca calculation.')    
@@ -53,7 +55,7 @@ else:
     print('usage: arg4, 5, 6, 7 means ' +
           'pc01_lo pc01_up pc02_lo pc02_up.' +
           'Set 4 values or def def def def.')
-    print('Arguments are not 8.')
+    print('Arguments are not 9.')
     exit()
 
 # tag
@@ -92,7 +94,20 @@ data_right_df = data_df[(data_df["left"] == 0) &
                         (data_df["star_pos"] > 1)]
 data_right_df.reset_index(inplace=True, drop=True)
 
-data_2darr = data_left_df[["pc01", "pc02"]].values
+data_2darr = None
+if (n_comp_pca == 2):
+    data_2darr = data_left_df[["pc01", "pc02"]].values
+elif (n_comp_pca == 3):
+    data_2darr = data_left_df[["pc01", "pc02", "pc03"]].values
+elif (n_comp_pca == 4):
+    data_2darr = data_left_df[["pc01", "pc02", "pc03", "pc04"]].values
+elif (n_comp_pca == 5):
+    data_2darr = data_left_df[["pc01", "pc02", "pc03", "pc04", "pc05"]].values
+elif (n_comp_pca == 6):
+    data_2darr = data_left_df[["pc01", "pc02", "pc03", "pc04", "pc05", "pc06"]].values
+else:
+    exit(1)
+    
 print(data_2darr)
 print(type(data_2darr))
 
@@ -176,7 +191,7 @@ plt.grid(True, linestyle='--')
 
 
 # plot
-outfile_full = outdir + "/" + "gmm.png"
+outfile_full = outdir + "/" + f"gmm_pca{n_comp_pca}.png"
 print("outfile = ", outfile_full)
 
 plt.savefig(outfile_full,
@@ -391,7 +406,7 @@ plt.ylim(0.0, 1.0)
 plt.grid(True, linestyle='--')
 
 # plot
-outfile_full = outdir + "/" + "roc.png"
+outfile_full = outdir + "/" + f"roc_pca{n_comp_pca}.png"
 print("outfile = ", outfile_full)
 
 plt.savefig(outfile_full,

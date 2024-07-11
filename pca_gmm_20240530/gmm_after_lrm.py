@@ -18,6 +18,7 @@ import pickle as pk
 from scipy import integrate
 
 # python3 gmm_after_lrm.py 1 0 0 def def def def rand
+# python3 gmm_after_lrm.py 1 0 0 -10 20 -10 10 0
 
 flag_cat = 0
 pca_feature = 0
@@ -237,16 +238,44 @@ if (1 == flag_cat):
     false_negative_rate = nevt_false_negative / nevt_star1
     true_positive_rate = nevt_true_positive / nevt_star1
 
-    print("true_negative_rate = ", true_negative_rate)
-    print("false_positive_rate = ", false_positive_rate)
-    print("false_negative_rate = ", false_negative_rate)
-    print("true_positive_rate = ", true_positive_rate)
+    print(f"true_negative_rate = {true_negative_rate:.3f}")
+    print(f"false_positive_rate = {false_positive_rate:.3f}")
+    print(f"false_negative_rate = {false_negative_rate:.3f}")
+    print(f"true_positive_rate = {true_positive_rate:.3f}")
 
+    # ratio of each element of confusion matrix:
+    ratio_true_negative = nevt_true_negative / nevt_all
+    ratio_false_negative = nevt_false_negative / nevt_all
+    ratio_false_positive = nevt_false_positive / nevt_all
+    ratio_true_positive = nevt_true_positive / nevt_all
+    ratio_gmm0 = nevt_gmm0 / nevt_all
+    ratio_gmm1 = nevt_gmm1 / nevt_all
+    ratio_star0 = nevt_star0 / nevt_all
+    ratio_star1 = nevt_star1 / nevt_all
+    
     print("confusion matrix:")
     print("               spike    star    total")
     print(f"gmm_spike: {nevt_true_negative} {nevt_false_negative} {nevt_gmm0} ")
     print(f"gmm_star:  {nevt_false_positive} {nevt_true_positive} {nevt_gmm1} ")
     print(f"total:     {nevt_star0} {nevt_star1}  {nevt_all}")
+
+    print("confusion matrix / nevt_all:")
+    print("               spike    star    total")
+    print(f"gmm_spike: {ratio_true_negative:.3f} {ratio_false_negative:.3f} {ratio_gmm0:.3f} ")
+    print(f"gmm_star:  {ratio_false_positive:.3f} {ratio_true_positive:.3f} {ratio_gmm1:.3f} ")
+    print(f"total:     {ratio_star0:.3f} {ratio_star1:.3f}  1.0")
+
+    print("confusion matrix (ratio):")
+    print("               spike    star    total")
+    print(f"gmm_spike: {nevt_true_negative} ({ratio_true_negative:.3f})  "
+          f"{nevt_false_negative} ({ratio_false_negative:.3f})  "
+          f"{nevt_gmm0} ({ratio_gmm0:.3f})")
+    print(f"gmm_star:  {nevt_false_positive} ({ratio_false_positive:.3f})  "
+          f"{nevt_true_positive} ({ratio_true_positive:.3f})  "
+          f"{nevt_gmm1} ({ratio_gmm1:.3f})")
+    print(f"total:     {nevt_star0} ({ratio_star0:.3f})  "
+          f"{nevt_star1} ({ratio_star1:.3f})  "
+          f"{nevt_all} (1.0)")
     
     print(len(data_star0_gmm0_df) + len(data_star0_gmm1_df)
           + len(data_star1_gmm0_df) + len(data_star1_gmm1_df))
@@ -340,7 +369,7 @@ for prob in np.arange(0.0, 1.0, 0.01):
     #print("false_negative_rate = ", false_negative_rate)
     #print("true_positive_rate = ", true_positive_rate)
 
-    print(false_positive_rate, true_positive_rate)
+    # print(false_positive_rate, true_positive_rate)
     false_positive_rate_list.append(false_positive_rate)
     true_positive_rate_list.append(true_positive_rate)
 

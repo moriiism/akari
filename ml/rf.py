@@ -103,20 +103,47 @@ def output_graphs(clf, X_test, y_test, feature_lst, outdir):
     false_negative_rate = nevt_false_negative / nevt_test1
     true_positive_rate = nevt_true_positive / nevt_test1
 
-    print("true_negative_rate = ", true_negative_rate)
-    print("false_positive_rate = ", false_positive_rate)
-    print("false_negative_rate = ", false_negative_rate)
-    print("true_positive_rate = ", true_positive_rate)
 
+    print(f"true_negative_rate = {true_negative_rate:.3f}")
+    print(f"false_positive_rate = {false_positive_rate:.3f}")
+    print(f"false_negative_rate = {false_negative_rate:.3f}")
+    print(f"true_positive_rate = {true_positive_rate:.3f}")
+
+    # ratio of each element of confusion matrix:
+    ratio_true_negative = nevt_true_negative / nevt_all
+    ratio_false_negative = nevt_false_negative / nevt_all
+    ratio_false_positive = nevt_false_positive / nevt_all
+    ratio_true_positive = nevt_true_positive / nevt_all
+    ratio_pred0 = nevt_pred0 / nevt_all
+    ratio_pred1 = nevt_pred1 / nevt_all
+    ratio_test0 = nevt_test0 / nevt_all
+    ratio_test1 = nevt_test1 / nevt_all
+    
     print("confusion matrix:")
     print("               spike    star    total")
     print(f"pred_spike: {nevt_true_negative} {nevt_false_negative} {nevt_pred0} ")
     print(f"pred_star:  {nevt_false_positive} {nevt_true_positive} {nevt_pred1} ")
     print(f"total:     {nevt_test0} {nevt_test1}  {nevt_all}")
+
+    print("confusion matrix / nevt_all:")
+    print("               spike    star    total")
+    print(f"pred_spike: {ratio_true_negative:.3f} {ratio_false_negative:.3f} {ratio_pred0:.3f} ")
+    print(f"pred_star:  {ratio_false_positive:.3f} {ratio_true_positive:.3f} {ratio_pred1:.3f} ")
+    print(f"total:     {ratio_test0:.3f} {ratio_test1:.3f}  1.0")
     
 
+    print("confusion matrix (ratio):")
+    print("               spike    star    total")
+    print(f"pred_spike: {nevt_true_negative} ({ratio_true_negative:.3f})  "
+          f"{nevt_false_negative} ({ratio_false_negative:.3f})  "
+          f"{nevt_pred0} ({ratio_pred0:.3f})")
+    print(f"pred_star:  {nevt_false_positive} ({ratio_false_positive:.3f})  "
+          f"{nevt_true_positive} ({ratio_true_positive:.3f})  "
+          f"{nevt_pred1} ({ratio_pred1:.3f})")
+    print(f"total:     {nevt_test0} ({ratio_test0:.3f})  "
+          f"{nevt_test1} ({ratio_test1:.3f})  "
+          f"{nevt_all} (1.0)")
     
-
 
 #### main
 

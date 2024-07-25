@@ -190,3 +190,10 @@ print("outfile = ", outfile_full)
 plt.savefig(outfile_full,
             bbox_inches='tight',  pad_inches=0.1)
 
+
+# dump spike data
+outcsv = outdir + "/" + "akari_stat_fit_star_pca_peak100_spike.csv"
+print(f"outcsv = {outcsv}")
+data_cat_spike_df.to_csv(outcsv, index=False)
+
+
